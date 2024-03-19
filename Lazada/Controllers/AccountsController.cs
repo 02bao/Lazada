@@ -1,6 +1,8 @@
 ﻿using AuthenticationPlugin;
 using Lazada.Data;
+using Lazada.Interface;
 using Lazada.Models;
+using Lazada.Repository;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,47 +13,41 @@ namespace Lazada.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly LazadaDBContext _context;
+        private readonly IUserRepository _userRepository;
 
-        public AccountsController(LazadaDBContext context )
+        public AccountsController(LazadaDBContext context, IUserRepository userRepository )
         {
             _context = context;
+            _userRepository = userRepository;
         }
 
         [HttpPost("Register")]
-        public async Task<IActionResult> Register(User user)
+        public  IActionResult Register(User user)
         {
-            var useremail = _context.Users.SingleOrDefault(u => u.Email == user.Email);
-            if(useremail != null)
+            bool tmp =  _userRepository.Register(user);
+            if (tmp)
+            {
+                return Ok("Register successfully");
+            }
+            else
             {
                 return BadRequest("This account has been exists");
             }
-
-            var userobj = new User()
-            {
-                Name = user.Name,
-                Email = user.Email,
-                Password = user.Password,
-            };
-            _context.Users.Add(userobj);
-            await _context.SaveChangesAsync();
-            return Ok(userobj);
         }
 
         [HttpPost("Login")]
         public IActionResult Login(User_login user)
         {
-            var userobj = _context.Users.Where(s => s.Name == user.Name
-                                                &&   s.Password == user.Password).FirstOrDefault();
-            if(userobj != null)
+            bool tmp = _userRepository.Login(user);
+            if (tmp)
             {
-                return Ok("login Successfully");
+                return Ok("Login successfully");
             }
             else
             {
-                return BadRequest(" Login Error");
+                return BadRequest("Login Error");
             }
         }
-
 
     }
 }

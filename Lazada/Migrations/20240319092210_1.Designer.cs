@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lazada.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    [Migration("20240319081236_1")]
+    [Migration("20240319092210_1")]
     partial class _1
     {
         /// <inheritdoc />

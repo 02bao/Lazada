@@ -1,5 +1,7 @@
 
 using Lazada.Data;
+using Lazada.Interface;
+using Lazada.Repository;
 
 namespace Lazada
 {
@@ -16,6 +18,7 @@ namespace Lazada
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<LazadaDBContext>();
+            builder.Services.AddScoped<IUserRepository,UserRepository>();
 
             var app = builder.Build();
 
