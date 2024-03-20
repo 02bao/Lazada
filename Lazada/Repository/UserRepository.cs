@@ -15,9 +15,20 @@ namespace Lazada.Repository
             _context = context;
         }
 
-        public ICollection<User> GetUer()
+        public bool Delete(User user)
         {
             throw new NotImplementedException();
+        }
+
+        public User GetById(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ICollection<User> GetUser()
+        {
+            List<User> user = _context.Users.ToList();
+            return user;
         }
 
         public bool Login(User_login user)
@@ -44,6 +55,11 @@ namespace Lazada.Repository
             _context.Users.Add(userobj);
             _context.SaveChanges();
             return true;
+        }
+
+        public bool Update(User_update user)
+        {
+            throw new NotImplementedException();
         }
     }
 }

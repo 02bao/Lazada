@@ -49,5 +49,12 @@ namespace Lazada.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult GetAll( )
+        {
+            var user = _userRepository.GetUser();
+            return Ok(user);
+        }
+
     }
 }
