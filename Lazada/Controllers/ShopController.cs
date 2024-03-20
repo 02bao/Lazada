@@ -28,5 +28,13 @@ namespace Lazada.Controllers
             return Ok("Create Successfully");
         }
 
+        [HttpGet("GetAll")]
+        public IActionResult GetAll()
+        {
+            var shop = _shopRepository.GetList();
+            return Ok(shop);
+        }
+
+
     }
 }

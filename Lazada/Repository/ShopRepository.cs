@@ -39,7 +39,7 @@ namespace Lazada.Repository
 
         public ICollection<Shop> GetList()
         {
-             List<Shop> Shop = _context.Shops.ToList();
+            List<Shop> Shop = _context.Shops.ToList();
             return Shop;
         }
 
