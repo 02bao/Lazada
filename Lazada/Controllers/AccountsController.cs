@@ -56,5 +56,16 @@ namespace Lazada.Controllers
             return Ok(user);
         }
 
+        [HttpGet("GetbyId")]
+        public IActionResult GetById(long id)
+        {
+            var user = _userRepository.GetById(id);
+            if(user == null)
+            {
+                return NotFound("This account has not been exists");
+            }
+            return Ok(user);
+        }
+
     }
 }

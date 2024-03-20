@@ -20,9 +20,9 @@ namespace Lazada.Repository
             throw new NotImplementedException();
         }
 
-        public User GetById(int id)
+        public User GetById(long id)
         {
-            throw new NotImplementedException();
+            return _context.Users.Where( u => u.Id == id).FirstOrDefault();
         }
 
         public ICollection<User> GetUser()
