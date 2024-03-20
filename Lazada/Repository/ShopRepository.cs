@@ -34,8 +34,14 @@ namespace Lazada.Repository
 
         public bool DeleteShop(long id)
         {
-            throw new NotImplementedException();
-
+            var shopdelete = _context.Shops.SingleOrDefault(s => s.Id == id);
+            if(shopdelete == null)
+            {
+                return false;
+            }
+            _context.Shops.Remove(shopdelete);
+            _context.SaveChanges();
+            return true;
         }
 
         public ICollection<Shop> GetList()
@@ -50,9 +56,17 @@ namespace Lazada.Repository
             return shopid;
         }
 
-        public bool UpdateShop(Shop shop)
+        public bool UpdateShop(Shop_update shopupdate)
         {
-            throw new NotImplementedException();
+            Shop? shops = _context.Shops.Where(s => s.Id == shopupdate.Id).FirstOrDefault();
+            if(shops == null)
+            {
+                return false;
+            }
+            shops.Phone = shopupdate.Phone;
+            shops.Address = shopupdate.Address;
+            _context.SaveChanges();
+            return true;
         }
     }
 }

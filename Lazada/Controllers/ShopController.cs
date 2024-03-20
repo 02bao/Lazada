@@ -44,5 +44,27 @@ namespace Lazada.Controllers
             }
             return NotFound("This account has not been exists");
         }
+
+        [HttpPost("update")]
+        public IActionResult UpdateShop(Shop_update shop)
+        {
+            bool tmp = _shopRepository.UpdateShop(shop);
+            if(tmp)
+            {
+                return Ok("Update successfully");
+            }
+            return BadRequest("Update Error");
+        }
+
+        [HttpDelete("Delete")]
+        public IActionResult DeleteShop(long id)
+        {
+            bool tmp = _shopRepository.DeleteShop(id);
+            if (tmp)
+            {
+                return Ok("Delete successfully");
+            }
+            return BadRequest("Delete Error");
+        }
     }
 }
