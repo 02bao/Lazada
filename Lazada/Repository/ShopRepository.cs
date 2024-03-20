@@ -35,6 +35,7 @@ namespace Lazada.Repository
         public bool DeleteShop(long id)
         {
             throw new NotImplementedException();
+
         }
 
         public ICollection<Shop> GetList()
@@ -43,9 +44,10 @@ namespace Lazada.Repository
             return Shop;
         }
 
-        public bool GetShopid(long id)
+        public Shop GetShopid(long id)
         {
-            throw new NotImplementedException();
+            var shopid = _context.Shops.Where(s => s.Id == id).FirstOrDefault();
+            return shopid;
         }
 
         public bool UpdateShop(Shop shop)

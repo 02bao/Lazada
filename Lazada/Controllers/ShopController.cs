@@ -34,7 +34,15 @@ namespace Lazada.Controllers
             var shop = _shopRepository.GetList();
             return Ok(shop);
         }
-
-
+        [HttpGet("GetById")]
+        public IActionResult GetById(long id)
+        {
+            var tmp = _shopRepository.GetShopid(id);
+            if(tmp != null)
+            {
+                return Ok(tmp);
+            }
+            return NotFound("This account has not been exists");
+        }
     }
 }
