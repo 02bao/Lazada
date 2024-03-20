@@ -19,6 +19,7 @@ namespace Lazada
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<LazadaDBContext>();
             builder.Services.AddScoped<IUserRepository,UserRepository>();
+            builder.Services.AddScoped<IShopRepository,ShopRepository>();
 
             var app = builder.Build();
 
