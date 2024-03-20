@@ -23,6 +23,26 @@ namespace Lazada.Repository
             return true;
         }
 
+        public async Task<string> ForgetPassword(User_Forget password)
+        {
+            User? user =  _context.Users.Where(s => s.Id ==  password.Id).FirstOrDefault();
+            if(user == null)
+            {
+                return null;
+            }
+
+            var users = await _context.Users.FirstOrDefaultAsync(u =>
+                u.Name == password.Name
+                && u.Email == password.Email
+                && u.Address == password.Address
+                && u.Phone == password.Phone);
+            if(users == null)
+            {
+                return null;
+            }
+            return users.Password;
+        }
+
         public User GetById(long id)
         {
             return _context.Users.Where( u => u.Id == id).FirstOrDefault();
@@ -76,5 +96,7 @@ namespace Lazada.Repository
             return true;
 
         }
+
+       
     }
 }

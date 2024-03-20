@@ -31,4 +31,13 @@
         public string Address { get; set; }
         public string Phone { get; set; }
     }
+
+    public class User_Forget
+    {
+        public long Id { get; set; } = DateTime.UtcNow.Ticks / 100;
+        public string Name { get; set; }
+        public string Email { get; set; }
+        public string Address { get; set; }
+        public string Phone { get; set; }
+    }
 }

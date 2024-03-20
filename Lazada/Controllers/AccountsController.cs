@@ -94,5 +94,19 @@ namespace Lazada.Controllers
                 return BadRequest("Delete Error");
             }
         }
+
+        [HttpPut("ForgetPassword")]
+        public async Task<IActionResult> ForggetPaassword(User_Forget password)
+        {
+            string getpassword = await _userRepository.ForgetPassword(password);
+            if(getpassword != null)
+            {
+                return Ok(getpassword);
+            }
+            else
+            {
+                return BadRequest("Error");
+            }
+        }
     }
 }
