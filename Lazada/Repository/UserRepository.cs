@@ -15,9 +15,12 @@ namespace Lazada.Repository
             _context = context;
         }
 
-        public bool Delete(User user)
+        public bool Delete(long id)
         {
-            throw new NotImplementedException();
+            User? user = _context.Users.Where(s => s.Id == id).FirstOrDefault();
+            _context.Users.Remove(user);
+            _context.SaveChanges();
+            return true;
         }
 
         public User GetById(long id)

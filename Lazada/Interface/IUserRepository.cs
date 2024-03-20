@@ -9,6 +9,6 @@ namespace Lazada.Interface
         bool Register(User_register user);
         bool Login(User_login user);  
         bool Update(User_update user);
-        bool Delete(User user);
+        bool Delete(long id);
     }
 }

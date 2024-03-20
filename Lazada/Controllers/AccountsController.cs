@@ -73,11 +73,25 @@ namespace Lazada.Controllers
             bool tmp = _userRepository.Update(user);
             if (tmp)
             {
-                return Ok("Register successfully");
+                return Ok("update successfully");
             }
             else
             {
-                return BadRequest("This account has been exists");
+                return BadRequest();
+            }
+        }
+
+        [HttpPost("Delete")]
+        public IActionResult Delete(long id)
+        {
+            bool tmp = _userRepository.Delete(id);
+            if (tmp)
+            {
+                return Ok("Delete successfully");
+            }
+            else
+            {
+                return BadRequest("Delete Error");
             }
         }
     }
