@@ -38,28 +38,40 @@ namespace Lazada.Repository
            return userobj != null;
         }
 
-        public bool Register(User user)
+        public bool Register(User_register userRegister)
         {
-            var useremail = _context.Users.SingleOrDefault(u => u.Email == user.Email);
+            var useremail = _context.Users.SingleOrDefault(u => u.Email == userRegister.Email);
             if (useremail != null)
             {
                 return false;
             }
 
-            var userobj = new User()
+            var user = new User()
             {
-                Name = user.Name,
-                Email = user.Email,
-                Password = user.Password,
+                Name = userRegister.Name,
+                Email = userRegister.Email,
+                Password = userRegister.Password,
+                Address = "",
+                Phone = ""
             };
-            _context.Users.Add(userobj);
+            _context.Users.Add(user);
             _context.SaveChanges();
             return true;
         }
 
-        public bool Update(User_update user)
+        public bool Update(User_update userupdate)
         {
-            throw new NotImplementedException();
+            User? user = _context.Users.Where(s => s.Id == userupdate.Id).FirstOrDefault();
+            if(user == null)
+            {
+                return false;
+            }
+            user.Password = userupdate.Password;
+            user.Address = userupdate.Address;
+            user.Phone = userupdate.Phone;
+            _context.SaveChanges();
+            return true;
+
         }
     }
 }

@@ -22,7 +22,7 @@ namespace Lazada.Controllers
         }
 
         [HttpPost("Register")]
-        public  IActionResult Register(User user)
+        public  IActionResult Register(User_register user)
         {
             bool tmp =  _userRepository.Register(user);
             if (tmp)
@@ -67,5 +67,18 @@ namespace Lazada.Controllers
             return Ok(user);
         }
 
+        [HttpPost("update")]
+        public IActionResult Update(User_update user)
+        {
+            bool tmp = _userRepository.Update(user);
+            if (tmp)
+            {
+                return Ok("Register successfully");
+            }
+            else
+            {
+                return BadRequest("This account has been exists");
+            }
+        }
     }
 }
