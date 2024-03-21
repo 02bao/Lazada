@@ -33,5 +33,16 @@ namespace Lazada.Controllers
             return Ok(category);
         }
 
+        [HttpGet("GetByid")]
+        public IActionResult GetCategoryById(long id)
+        {
+            var tmp = _categoryRepository.GetbyId(id);
+            if(tmp != null)
+            {
+                return Ok(tmp);
+            }
+            return BadRequest("Error");
+        }
+
     }
 }
