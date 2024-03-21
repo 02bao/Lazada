@@ -1,6 +1,7 @@
 ﻿using Lazada.Data;
 using Lazada.Interface;
 using Lazada.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Lazada.Repository
 {
@@ -12,10 +13,16 @@ namespace Lazada.Repository
         {
             _context = context;
         }
-        public bool CreateShop(Shop_Create shop)
+        public bool CreateShop(Shop_Create shop, long userId)
         {
             var Emailshop = _context.Shops.SingleOrDefault(s => s.Email == shop.Email);
             if (Emailshop != null)
+            {
+                return false;
+            }
+
+            var user = _context.Users.SingleOrDefault(u => u.Id == userId);
+            if(user == null)
             {
                 return false;
             }
@@ -24,8 +31,9 @@ namespace Lazada.Repository
                 Name = shop.Name,
                 Email = shop.Email,
                 Sanpham = shop.Sanpham,
-                Phone ="",
-                Address=""
+                Phone = "",
+                Address = "",
+                User = user,
             };
             _context.Shops.Add(shops);
             _context.SaveChanges();
@@ -48,6 +56,24 @@ namespace Lazada.Repository
         {
             List<Shop> Shop = _context.Shops.ToList();
             return Shop;
+        }
+
+        public List<Shop_User> GetShopByUserId(long userId)
+        {
+            var shops = _context.Shops.Where(s => s.User.Id == userId).ToList();
+            List<Shop_User> shopuser = new List<Shop_User>();
+            foreach (var shop in shops)
+            {
+                shopuser.Add(new Shop_User
+                {
+                    Id = shop.Id,
+                    Name = shop.Name,
+                    Email = shop.Email,
+                    Sanpham = shop.Sanpham,
+                });
+            }
+            return shopuser;
+            
         }
 
         public Shop GetShopid(long id)

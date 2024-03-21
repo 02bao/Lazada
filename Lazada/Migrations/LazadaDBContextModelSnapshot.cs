@@ -49,7 +49,12 @@ namespace Lazada.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Shops");
                 });
@@ -85,6 +90,22 @@ namespace Lazada.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Shop", b =>
+                {
+                    b.HasOne("Lazada.Models.User", "User")
+                        .WithMany("shops")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Lazada.Models.User", b =>
+                {
+                    b.Navigation("shops");
                 });
 #pragma warning restore 612, 618
         }

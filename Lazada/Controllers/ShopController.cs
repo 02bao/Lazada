@@ -18,9 +18,9 @@ namespace Lazada.Controllers
             _shopRepository = shopRepository;
         }
         [HttpPost("CreateShop")]
-        public IActionResult CreateShop(Shop_Create shop)
+        public IActionResult CreateShop(Shop_Create shop, long userId)
         {
-            bool  shopcreate = _shopRepository.CreateShop(shop);
+            bool  shopcreate = _shopRepository.CreateShop(shop, userId);
             if(shopcreate == null)
             {
                 return BadRequest("Create Error");
@@ -66,5 +66,13 @@ namespace Lazada.Controllers
             }
             return BadRequest("Delete Error");
         }
+
+        [HttpGet("GetshopByuserId")]
+        public IActionResult GetshopByuserId(long userId) 
+        {
+            var shops = _shopRepository.GetShopByUserId(userId);
+            return Ok(shops);
+        }
+
     }
 }
