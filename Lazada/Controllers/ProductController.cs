@@ -15,9 +15,9 @@ namespace Lazada.Controllers
             _productRepository = productRepository;
         }
         [HttpPost("CreateProduct")]
-        public IActionResult CreateProduct(Product_Create productCreate, long categoryid)
+        public IActionResult CreateProduct(Product_Create productCreate, long categoryid, long shopid)
         {
-            bool tmp = _productRepository.CreateProduct(productCreate, categoryid);
+            bool tmp = _productRepository.CreateProduct(productCreate, categoryid, shopid);
             if(tmp)
             {
                 return Ok("Create Successfully");

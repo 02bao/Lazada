@@ -14,10 +14,15 @@ namespace Lazada.Repository
             _context = context;
         }
 
-        public bool CreateProduct(Product_Create productcreate, long categoryid)
+        public bool CreateProduct(Product_Create productcreate, long categoryid, long shopid)
         {
             var category = _context.Categories.SingleOrDefault(s => s.Id == categoryid);
             if (category == null)
+            {
+                return false;
+            }
+            var shop = _context.Shops.SingleOrDefault(s => s.Id ==  shopid);
+            if(shop == null)
             {
                 return false;
             }
@@ -30,6 +35,7 @@ namespace Lazada.Repository
                 Description="",
                 Brand="",
                 Category = category,
+                Shop = shop,
             };
             _context.Products.Add(product);
             _context.SaveChanges();

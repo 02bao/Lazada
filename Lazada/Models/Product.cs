@@ -10,6 +10,7 @@
         public string Description { get; set; }
         public string Brand { get; set; }
         public Category Category { get; set; }
+        public Shop Shop { get; set; }
     }
 
     public class Product_Create
