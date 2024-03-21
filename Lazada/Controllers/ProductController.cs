@@ -24,5 +24,23 @@ namespace Lazada.Controllers
             }
             return BadRequest("Create Error");
         }
+
+        [HttpGet("GetAll")]
+        public IActionResult GetList()
+        {
+            var products = _productRepository.GetList();
+            return Ok(products);
+        }
+
+        [HttpGet("GetbyId")]
+        public IActionResult GetProductById(long id)
+        {
+            var products = _productRepository.GetById(id);
+            if(products != null)
+            {
+                return Ok(products);
+            }
+            return BadRequest("Error");
+        }
     }
 }

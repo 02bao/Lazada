@@ -1,6 +1,7 @@
 ﻿using Lazada.Data;
 using Lazada.Interface;
 using Lazada.Models;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace Lazada.Repository
 {
@@ -42,12 +43,14 @@ namespace Lazada.Repository
 
         public Product GetById(long id)
         {
-            throw new NotImplementedException();
+            var product = _context.Products.SingleOrDefault(s => s.Id == id);
+            return product;
         }
 
         public ICollection<Product> GetList()
         {
-            throw new NotImplementedException();
+            List<Product> products = _context.Products.ToList();
+            return products;
         }
 
         public List<Product_category> GetProductByCategoryId(long categoryid)
