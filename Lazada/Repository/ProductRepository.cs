@@ -38,7 +38,14 @@ namespace Lazada.Repository
 
         public bool DeleteProduct(long id)
         {
-            throw new NotImplementedException();
+            var products = _context.Products.SingleOrDefault(s => s.Id == id);
+            if(products == null)
+            {
+                return false;
+            }
+            _context.Products.Remove(products);
+            _context.SaveChanges();
+            return true;
         }
 
         public Product GetById(long id)
@@ -55,12 +62,34 @@ namespace Lazada.Repository
 
         public List<Product_category> GetProductByCategoryId(long categoryid)
         {
-            throw new NotImplementedException();
+            var products = _context.Products.Where(s => s.Category.Id == categoryid);
+            List<Product_category> productcategory = new List<Product_category>();
+            foreach(var  product in products)
+            {
+                productcategory.Add(new Product_category
+                {
+                    ProductName = product.ProductName,
+                    ProductPrice = product.ProductPrice,
+                    Sold = product.Sold,
+                    Color = product.Color,
+                    Brand = product.Brand,
+                });
+            }
+            return productcategory;
         }
 
         public bool UpdateProduct(Product_update productupdate)
         {
-            throw new NotImplementedException();
+            var products = _context.Products.SingleOrDefault(s => s.Id ==  productupdate.Id);
+            if(products == null)
+            {
+                return false;
+            }
+            products.Sold = productupdate.Sold;
+            products.Description = productupdate.Description;
+            products.Brand = productupdate.Brand;
+            _context.SaveChanges();
+            return true;
         }
     }
 }
