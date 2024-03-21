@@ -13,10 +13,10 @@ namespace Lazada.Repository
             _context = context;
         }
 
-        public bool CreateProduct(Product_Create productcreate, long shopid)
+        public bool CreateProduct(Product_Create productcreate, long categoryid)
         {
-            var shops = _context.Shops.SingleOrDefault(s => s.Id == shopid);
-            if(shops == null)
+            var category = _context.Categories.SingleOrDefault(s => s.Id == categoryid);
+            if (category == null)
             {
                 return false;
             }
@@ -24,9 +24,11 @@ namespace Lazada.Repository
             {
                 ProductName = productcreate.ProductName,
                 ProductPrice = productcreate.ProductPrice,
+                Color = productcreate.Color,
                 Sold = 0,
                 Description="",
                 Brand="",
+                Category = category,
             };
             _context.Products.Add(product);
             _context.SaveChanges();
@@ -44,6 +46,11 @@ namespace Lazada.Repository
         }
 
         public ICollection<Product> GetList()
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Product_category> GetProductByCategoryId(long categoryid)
         {
             throw new NotImplementedException();
         }

@@ -6,8 +6,9 @@ namespace Lazada.Interface
     {
         ICollection<Product> GetList();
         Product GetById(long id);
-        bool CreateProduct(Product_Create productcreate, long shopid);
+        bool CreateProduct(Product_Create productcreate, long categoryid);
         bool UpdateProduct(Product_update productupdate);
         bool DeleteProduct(long id);
+        List<Product_category> GetProductByCategoryId(long categoryid);
     }
 }
