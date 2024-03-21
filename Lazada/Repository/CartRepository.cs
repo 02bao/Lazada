@@ -58,6 +58,11 @@ namespace Lazada.Repository
             return true;
         }
 
+        public bool descreaCartItem(long cartitemid)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Cart_see> GetCartByUserId(long userId)
         {
             var userCarts = _context.Carts.Include(c => c.CartItems)
@@ -89,6 +94,22 @@ namespace Lazada.Repository
             }
 
             return CartList;
+        }
+
+        public bool IncreaCartItem(long cartitemid)
+        {
+            var cartitems = _context.CartItems.SingleOrDefault(s => s.Id == cartitemid);
+            if(cartitems == null) 
+            {
+                return false;
+            }
+            else
+            {
+                cartitems.quantity += 1;
+                _context.SaveChanges();
+                return true;
+            }
+
         }
     }
 }

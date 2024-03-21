@@ -6,5 +6,7 @@ namespace Lazada.Interface
     {
         bool AddtoCart(long userId, long ProductId, CartItem_add cartItem_Add);
         List<Cart_see> GetCartByUserId(long userId);
+        bool IncreaCartItem(long cartitemid);
+        bool descreaCartItem(long cartitemid);
     }
 }

@@ -32,5 +32,17 @@ namespace Lazada.Controllers
             var carts = _cartRepository.GetCartByUserId(userId);
             return Ok(carts);
         }
+
+        [HttpPost("IncreaCartItem")]
+        public IActionResult IncreaCartItem(long cartItemId)
+        {
+            bool tmp = _cartRepository.IncreaCartItem(cartItemId);
+            if(tmp)
+            {
+                return Ok("Increase Successfully");
+            }
+            return BadRequest("Error");
+        }
+
     }
 }
