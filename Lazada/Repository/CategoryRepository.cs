@@ -35,13 +35,36 @@ namespace Lazada.Repository
 
         public bool DeleteCategory(long id)
         {
-            throw new NotImplementedException();
+            var category = _context.Categories.SingleOrDefault(s => s.Id == id);
+            if(category == null)
+            {
+                return false;
+            }
+            _context.Categories.Remove(category);
+            _context.SaveChanges();
+            return true;
         }
 
         public Category GetbyId(long id)
         {
             var category = _context.Categories.SingleOrDefault(s => s.Id == id);
             return category;
+        }
+
+        public List<Category_shop> GetCategoryByshopid(long shopid)
+        {
+            var categories = _context.Categories.Where(s => s.Shops.Id == shopid);
+            List<Category_shop> categoryshop = new List<Category_shop>();
+            foreach(var category in categories)
+            {
+                categoryshop.Add(new Category_shop
+                {
+                    CategoryName = category.CategoryName,
+                    ParentCategoryId = category.ParentCategoryId,
+                    Description = category.Description,
+                });
+            }
+            return categoryshop;
         }
 
         public ICollection<Category> GetList()
@@ -52,7 +75,15 @@ namespace Lazada.Repository
 
         public bool UpdateCategory(Category_update categoryUpdate)
         {
-            throw new NotImplementedException();
+            var categories = _context.Categories.SingleOrDefault(s => s.Id == categoryUpdate.Id);
+            if(categories == null)
+            {
+                return false;
+            }
+            categories.Description = categoryUpdate.Description;
+            categories.Slug = categoryUpdate.Slug;
+            _context.SaveChanges();
+            return true;
         }
     }
 }

@@ -9,5 +9,6 @@ namespace Lazada.Interface
         bool CreateCategory(Categor_Create categorycreate, long shopid);
         bool UpdateCategory(Category_update categoryUpdate);
         bool DeleteCategory(long id);
+        List<Category_shop> GetCategoryByshopid(long shopid);
     }
 }

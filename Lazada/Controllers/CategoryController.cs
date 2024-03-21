@@ -44,5 +44,35 @@ namespace Lazada.Controllers
             return BadRequest("Error");
         }
 
+        [HttpPost("UpdateCategory")]
+        public IActionResult UpdateCategory(Category_update categoryUpdate)
+        {
+            bool tmp = _categoryRepository.UpdateCategory(categoryUpdate);
+            if(tmp)
+            {
+                return Ok("Update successfully");
+            }
+            return BadRequest("Update Error");
+        }
+
+        [HttpDelete("DeleteCategory")]
+        public IActionResult DeleteCategory(long id)
+        {
+            bool tmp = _categoryRepository.DeleteCategory(id);
+            if( tmp)
+            {
+                return Ok("Delete Successfully");
+            }
+            return BadRequest("Delete Error");
+        }
+
+        [HttpPost("GetCategoryByShopid")]
+        public IActionResult GetCategoryByshopId(long shopId)
+        {
+            var categories = _categoryRepository.GetCategoryByshopid(shopId);
+            return Ok(categories);
+        }
+
+
     }
 }

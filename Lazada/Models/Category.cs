@@ -22,4 +22,12 @@
         public string Description { get; set; }
         public string Slug { get; set; }
     }
+    
+    public class Category_shop
+    {
+        public long Id { get; set; }
+        public string CategoryName { get; set; }
+        public int ParentCategoryId { get; set; }
+        public string Description { get; set; }
+    }
 }
