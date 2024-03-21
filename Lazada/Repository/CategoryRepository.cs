@@ -44,7 +44,8 @@ namespace Lazada.Repository
 
         public ICollection<Category> GetList()
         {
-            throw new NotImplementedException();
+            List<Category> categories = _context.Categories.ToList();
+            return categories;
         }
 
         public bool UpdateCategory(Category_update categoryUpdate)

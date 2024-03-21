@@ -26,5 +26,12 @@ namespace Lazada.Controllers
             return BadRequest("Create Error");
         }
 
+        [HttpGet("GetAll")]
+        public IActionResult GetList()
+        {
+            var category = _categoryRepository.GetList();
+            return Ok(category);
+        }
+
     }
 }
