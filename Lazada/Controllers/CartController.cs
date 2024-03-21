@@ -44,5 +44,26 @@ namespace Lazada.Controllers
             return BadRequest("Error");
         }
 
+        [HttpPost("DescreaseCartItem")]
+        public IActionResult DescreaseCartItem(long cartItemId)
+        {
+            bool tmp = _cartRepository.descreaCartItem(cartItemId);
+            if(tmp)
+            {
+                return Ok("Descrease successfully");
+            }
+            return BadRequest("Error");
+        }
+
+        [HttpDelete("DeleteCartItem")]
+        public IActionResult DeleteCartItem(long userId, long cartItemId)
+        {
+            bool tmp = _cartRepository.RemoveCartItem(userId, cartItemId);
+            if( tmp )
+            {
+                return Ok("Delete Successfully");
+            }
+            return BadRequest("Error");
+        }
     }
 }

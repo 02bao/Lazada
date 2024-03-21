@@ -8,5 +8,6 @@ namespace Lazada.Interface
         List<Cart_see> GetCartByUserId(long userId);
         bool IncreaCartItem(long cartitemid);
         bool descreaCartItem(long cartitemid);
+        bool RemoveCartItem(long userId, long cartitemId);
     }
 }
