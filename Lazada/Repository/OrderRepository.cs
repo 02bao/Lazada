@@ -43,5 +43,42 @@ namespace Lazada.Repository
             _context.SaveChanges();
             return true;
         }
+
+        public List<Order_User> GetOrderByUserId(long userId)
+        {
+            List<Order_User>  response = new List<Order_User>();
+            User? user = _context.Users.SingleOrDefault(s => s.Id == userId);
+            if(user == null) 
+            {
+                return response;
+            }
+            List<Order> orders = _context.Orders.Where( s => s.User == user)
+                                                .Include(p => p.Shop).ToList();
+            foreach(var order in orders)
+            {
+                Order_User myorder = new Order_User();
+                myorder.orderid = order.Id;
+                myorder.shopname = order.Shop.Name;
+                myorder.shopid = order.Shop.Id;
+                List<OrderItem> orderItems = new List<OrderItem>();
+
+                List<CartItem> cartitems = _context.CartItems.Where(ci => ci.Carts.Id == order.Id).ToList();
+                foreach(CartItem item in cartitems)
+                {
+                    OrderItem orderitem = new OrderItem();
+                    orderitem.Product_Id = item.Product.Id;
+                    orderitem.productname = item.Product.ProductName;
+                    orderitem.productprice = item.Product.ProductPrice;
+                    orderitem.quantity = item.quantity;
+                    orderitem.option = item.option;
+                    orderItems.Add(orderitem);
+                }
+                myorder.list_orderitem = orderItems;
+                
+                response.Insert(0, myorder);
+            }
+            return response;
+        }
+        
     }
 }
