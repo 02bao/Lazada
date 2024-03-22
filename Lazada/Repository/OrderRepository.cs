@@ -3,6 +3,7 @@ using Lazada.Interface;
 using Lazada.Models;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
+using System.Web.Helpers;
 
 
 namespace Lazada.Repository
@@ -15,38 +16,32 @@ namespace Lazada.Repository
         {
             _context = context;
         }
-        public bool AddtoOrder(Order order, long cartitemId)
+        public bool AddtoOrder(Order order, long cartitemId, long userId )
         {
-            Order newOrder = new Order();
-            //kiểm tra mặt hàng có trong giỏi hàng không.
-            var cartItem = _context.CartItems.Include( c => c.Carts).ThenInclude( u => u.Users)
-                                             .Include( p => p.Product).ThenInclude(s => s.Shop) 
-                                             .SingleOrDefault(ci => ci.Id == cartitemId);
-            if(cartItem == null)
+            var cartitem = _context.CartItems.Include(ci => ci.Carts)
+                                              .ThenInclude(Carts => Carts.Shops)
+                                              .SingleOrDefault(ci => ci.Id == cartitemId);
+            if(cartitem == null)
             {
                 return false;
             }
-            //Tạo mới một đơn hàng 
-            var NewOrder = new Order
+            var users = _context.Users.SingleOrDefault(s => s.Id == userId);
+            if(users == null)
             {
-                User = cartItem.Carts.Users,
-                Shop = cartItem.Product.Shop,
-                list_cart_item = new List<CartItem>()
-            };
-            //Lặp qua các mặt hàng trong giỏi hàng và xem chúng có cùng 1 cửa hàng hay không
-            var cartItemSameShop = cartItem.Carts.CartItems
-                                            .Where(ci => ci.Product.Shop.Id == NewOrder.Shop.Id)
-                                            .ToList();
-
-            //Thêm các mặt hàng vào đơn hàng 
-            foreach(var item in cartItemSameShop )
-            {
-                newOrder.list_cart_item.Add(item);
+                return false;
             }
-            _context.Orders.Add(newOrder);
+            var shops = cartitem.Carts.Shops;
+            order.User = users;
+            order.Shop = shops;
+            order.list_cart_item = new List<string>
+            {
+                cartitemId.ToString()
+            };
+            _context.Orders.Add(order);
             _context.SaveChanges();
             return true;
-
         }
+
+        
     }
 }
