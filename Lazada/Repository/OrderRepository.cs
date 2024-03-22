@@ -16,8 +16,13 @@ namespace Lazada.Repository
         {
             _context = context;
         }
-        public bool AddtoOrder(Order order, long cartitemId, long userId )
+        public bool AddtoOrder( long cartitemId, long userId )
         {
+            var users = _context.Users.SingleOrDefault(s => s.Id == userId);
+            if(users == null)
+            {
+                return false;
+            }
             var cartitem = _context.CartItems.Include(ci => ci.Carts)
                                               .ThenInclude(Carts => Carts.Shops)
                                               .SingleOrDefault(ci => ci.Id == cartitemId);
@@ -25,17 +30,14 @@ namespace Lazada.Repository
             {
                 return false;
             }
-            var users = _context.Users.SingleOrDefault(s => s.Id == userId);
-            if(users == null)
-            {
-                return false;
-            }
-            var shops = cartitem.Carts.Shops;
+            var order = new Order();
+            
+            var cartItemDetail = $"{users.Name}, {cartitem.Carts.Shops.Name}";
             order.User = users;
-            order.Shop = shops;
+            order.Shopid = cartitem.Carts.Shops.Id;
             order.list_cart_item = new List<string>
             {
-                cartitemId.ToString()
+                cartItemDetail
             };
             _context.Orders.Add(order);
             _context.SaveChanges();

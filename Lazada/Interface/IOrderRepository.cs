@@ -4,6 +4,6 @@ namespace Lazada.Interface
 {
     public interface IOrderRepository
     {
-        bool AddtoOrder(Order order, long cartitemId, long userId);
+        bool AddtoOrder( long cartitemId, long userId);
     }
 }
