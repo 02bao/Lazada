@@ -143,7 +143,6 @@ namespace Lazada.Migrations
                     discount = table.Column<int>(type: "integer", nullable: false),
                     list_product_applied = table.Column<List<string>>(type: "text[]", nullable: false),
                     list_user_applied = table.Column<List<string>>(type: "text[]", nullable: false),
-                    type = table.Column<bool>(type: "boolean", nullable: false),
                     ShopId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>

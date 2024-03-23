@@ -39,7 +39,8 @@ namespace Lazada.Repository
                 };
                 _context.Carts.Add(userCart);
             }
-            var ExistsCartItem = userCart.CartItems.SingleOrDefault(s => s.Product.Id == cartItem_Add.Id);
+            var ExistsCartItem = userCart.CartItems.Where(s => s.Status == Status_cart_item.active
+            && s.Product.Id == cartItem_Add.Id).FirstOrDefault();
             if(ExistsCartItem == null)
             {
 

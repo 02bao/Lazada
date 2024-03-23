@@ -24,6 +24,7 @@ namespace Lazada
             builder.Services.AddScoped<IProductRepository,ProductRepository>();
             builder.Services.AddScoped<ICartRepository,CartRepository>();
             builder.Services.AddScoped<IOrderRepository,OrderRepository>();
+            builder.Services.AddScoped<IVoucherRepository,VoucherRepository>();
 
             var app = builder.Build();
 

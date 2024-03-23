@@ -17,20 +17,19 @@ namespace Lazada.Repository
             if(string.IsNullOrEmpty(addvoucher.title))
                 return false;
             Shop shops = _context.Shops.SingleOrDefault(s => s.Id == shopid);
-            if(shopid == null) 
+            if(shops == null) 
             {
                 return false;
             }
-                Voucher allshop = new Voucher
-                {
-                    title = addvoucher.title,
-                    public_date = addvoucher.public_date,
-                    expire_date = addvoucher.expire_date,
-                    discount = addvoucher.discount,
-                    list_product_applied = null
-                };
-                _context.Vouchers.Add(allshop);
-                shops.Voucher.Add(allshop);
+            Voucher allshop = new Voucher
+            {
+                title = addvoucher.title,
+                public_date = addvoucher.public_date,
+                expire_date = addvoucher.expire_date,
+                discount = addvoucher.discount,
+            };
+            _context.Vouchers.Add(allshop);
+            shops.Voucher.Add(allshop);
            
             _context.SaveChanges();
             return true;

@@ -8,7 +8,15 @@
         public string option { get; set; }
         public int quantity { get; set; } = 1;
         public Order? order { get; set; }
+        public int MyProperty { get; set; }
+        public Status_cart_item Status { get; set; } = Status_cart_item.active;
+         
+    }
 
+    public enum Status_cart_item
+    {
+        active,
+        order,
     }
     public class CartItem_add
     {

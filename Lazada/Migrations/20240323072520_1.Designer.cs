@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Lazada.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lazada.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    partial class LazadaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240323072520_1")]
+    partial class _1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,14 +60,8 @@ namespace Lazada.Migrations
                     b.Property<long>("CartsId")
                         .HasColumnType("bigint");
 
-                    b.Property<int>("MyProperty")
-                        .HasColumnType("integer");
-
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
 
                     b.Property<string>("option")
                         .IsRequired()
@@ -283,9 +280,11 @@ namespace Lazada.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<List<string>>("list_product_applied")
+                        .IsRequired()
                         .HasColumnType("text[]");
 
                     b.Property<List<string>>("list_user_applied")
+                        .IsRequired()
                         .HasColumnType("text[]");
 
                     b.Property<DateTime>("public_date")

@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lazada.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    [Migration("20240323063702_1")]
-    partial class _1
+    [Migration("20240323073529_2")]
+    partial class _2
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -293,9 +293,6 @@ namespace Lazada.Migrations
                     b.Property<string>("title")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<bool>("type")
-                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 

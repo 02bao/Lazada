@@ -92,6 +92,7 @@ namespace Lazada.Repository
             {
                 response.Add(new Product_Shop
                 {
+                    Id = product.Id,
                     ProductName= product.ProductName,
                     ProductPrice= product.ProductPrice,
                     Brand= product.Brand,
