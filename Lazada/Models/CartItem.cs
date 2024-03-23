@@ -7,7 +7,8 @@
         public Product Product { get; set; }
         public string option { get; set; }
         public int quantity { get; set; } = 1;
-        
+        public Order? order { get; set; }
+
     }
     public class CartItem_add
     {

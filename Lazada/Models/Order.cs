@@ -6,6 +6,17 @@
         public User User { get; set; }
         public Shop Shop { get; set; }
         public List<string> list_cart_item { get; set; }
+        public Status_Order status { get; set; } = Status_Order.cho_thanh_toan;
+        public DateTime time { get; set; }
+    }
+
+    public enum Status_Order
+    {
+        cho_thanh_toan,
+        dang_xu_ly,
+        dang_van_chuyen,
+        da_giao,
+        da_huy
     }
 
     public class OrderItem
