@@ -61,5 +61,62 @@ namespace Lazada.Repository
             }
             return response;
         }
+
+        public List<Voucher_Product> GetVoucherbyShopid(long shopid)
+        {
+            List<Voucher_Product> response = new List<Voucher_Product>();
+            Shop shops = _context.Shops.Where(s => s.Id == shopid).Include(s => s.Voucher)
+                                        .FirstOrDefault();
+            if(shops  == null)
+            {
+                return response;
+            }
+            else if(shops.Voucher.Any())
+            {
+                List<Voucher> shop_voucher = shops.Voucher;
+                foreach(Voucher item in  shop_voucher)
+                {
+                    Voucher_Product tmp = new Voucher_Product
+                    {
+                        voucherId = item.Id,
+                        title = item.title,
+                        discount = item.discount,
+                    };
+                    response.Add(tmp);
+                }
+            }
+            return response;
+
+        }
+
+        public List<Voucher_Product> WareHouseShopVoucher(long userid)
+        {
+            List<Voucher_Product> response = new List<Voucher_Product>();
+            User user = _context.Users.Where(s => s.Id == userid)
+                                       .Include(s => s.vouchers).FirstOrDefault();
+            if(user == null) 
+            {
+                return response;
+            }
+            List<Voucher>? shopvoucher = user.vouchers.ToList();
+            if(shopvoucher != null && shopvoucher.Any())
+            {
+                shopvoucher = shopvoucher!.Where(s => s.list_user_applied == null || 
+                    !s.list_user_applied.Contains(userid.ToString())).ToList();
+
+                foreach(Voucher item in shopvoucher)
+                {
+                    Voucher_Product tmp = new Voucher_Product
+                    {
+                        voucherId=item.Id,
+                        title = item.title,
+                        discount = item.discount,
+                    };
+                    response.Add(tmp);
+                }
+            }
+            return response;
+
+        }
     }
 }

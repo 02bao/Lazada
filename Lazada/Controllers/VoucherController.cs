@@ -33,5 +33,18 @@ namespace Lazada.Controllers
             return Ok(tmp);
         }
 
+        [HttpGet("GetVoucherByShopId")]
+        public IActionResult GetVoucherByShopId(long shopid)
+        {
+            var tmp = _voucherRepository.GetVoucherbyShopid(shopid);
+            return Ok(tmp);
+        }
+
+        [HttpGet("WareHouseShopVoucher")]
+        public IActionResult WareHouseShopVoucher(long userid)
+        {
+            var tmp = _voucherRepository.WareHouseShopVoucher(userid);
+            return Ok(tmp);
+        }
     }
 }
