@@ -2,6 +2,7 @@
 using Lazada.Interface;
 using Lazada.Models;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Linq;
 using System.Web.Helpers;
 
@@ -54,15 +55,17 @@ namespace Lazada.Repository
             }
             List<Order> orders = _context.Orders.Where( s => s.User == user)
                                                 .Include(p => p.Shop).ToList();
-            foreach(var order in orders)
+            foreach(Order order in orders)
             {
                 Order_User myorder = new Order_User();
-                myorder.orderid = order.Id;
-                myorder.shopname = order.Shop.Name;
-                myorder.shopid = order.Shop.Id;
+                
+                List<CartItem> cartitems = new List<CartItem>();
+                foreach(string cartitem in order.list_cart_item)
+                {
+                    //CartItem tmp = JsonConvert.DeserializeObject<CartItem>(cartitem);
+                    //cartitems.Add(tmp);
+                }
                 List<OrderItem> orderItems = new List<OrderItem>();
-
-                List<CartItem> cartitems = _context.CartItems.Where(ci => ci.Carts.Id == order.Id).ToList();
                 foreach(CartItem item in cartitems)
                 {
                     OrderItem orderitem = new OrderItem();
@@ -71,10 +74,13 @@ namespace Lazada.Repository
                     orderitem.productprice = item.Product.ProductPrice;
                     orderitem.quantity = item.quantity;
                     orderitem.option = item.option;
+                    orderitem.cartitem_id = item.Id;
                     orderItems.Add(orderitem);
                 }
                 myorder.list_orderitem = orderItems;
-                
+                myorder.orderid = order.Id;
+                myorder.shopname = order.Shop.Name;
+                myorder.shopid = order.Shop.Id;
                 response.Insert(0, myorder);
             }
             return response;
