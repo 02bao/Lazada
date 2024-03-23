@@ -20,4 +20,11 @@
         public int discount { get; set; } = 0;
         public List<string>? list_product_applied { get; set; }
     }
+
+    public class Voucher_Product
+    {
+        public long voucherId { get; set; }
+        public string title { get; set; }
+        public int discount { get; set; }
+    }
 }

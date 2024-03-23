@@ -1,6 +1,7 @@
 ﻿using Lazada.Data;
 using Lazada.Interface;
 using Lazada.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lazada.Repository
 {
@@ -33,6 +34,32 @@ namespace Lazada.Repository
            
             _context.SaveChanges();
             return true;
+        }
+
+        public List<Voucher_Product> GetVoucherbyCartId(long cartid)
+        {
+            List<Voucher_Product> response = new List<Voucher_Product>();
+            Cart carts = _context.Carts.Include(s => s.Shops).ThenInclude(s => s.Voucher)
+                                        .SingleOrDefault(s => s.Id == cartid);
+            if (carts == null)
+            {
+                return response;
+            }
+            else if(carts.Shops.Voucher.Any())
+            {
+                List<Voucher> vouchers = carts.Shops.Voucher;
+                foreach(Voucher voucher in vouchers)
+                {
+                    Voucher_Product tmp = new Voucher_Product
+                    {
+                        voucherId = voucher.Id,
+                        title = voucher.title,
+                        discount = voucher.discount,
+                    };
+                    response.Add(tmp);
+                }
+            }
+            return response;
         }
     }
 }

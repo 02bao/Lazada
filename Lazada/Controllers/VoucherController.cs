@@ -26,5 +26,12 @@ namespace Lazada.Controllers
             return BadRequest("Error");
         }
 
+        [HttpGet("GetVoucherByCartID")]
+        public IActionResult GetVoucherByCartID(long cartid)
+        {
+            var tmp = _voucherRepository.GetVoucherbyCartId(cartid);
+            return Ok(tmp);
+        }
+
     }
 }
