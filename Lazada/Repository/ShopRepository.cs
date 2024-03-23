@@ -30,7 +30,6 @@ namespace Lazada.Repository
             {
                 Name = shop.Name,
                 Email = shop.Email,
-                Sanpham = shop.Sanpham,
                 Phone = "",
                 Address = "",
                 User = user,
@@ -69,7 +68,6 @@ namespace Lazada.Repository
                     Id = shop.Id,
                     Name = shop.Name,
                     Email = shop.Email,
-                    Sanpham = shop.Sanpham,
                 });
             }
             return shopuser;
@@ -81,6 +79,7 @@ namespace Lazada.Repository
             var shopid = _context.Shops.Where(s => s.Id == id).FirstOrDefault();
             return shopid;
         }
+
 
         public bool UpdateShop(Shop_update shopupdate)
         {

@@ -38,15 +38,12 @@ namespace Lazada.Controllers
         [HttpPost("Login")]
         public IActionResult Login(User_login user)
         {
-            bool tmp = _userRepository.Login(user);
-            if (tmp)
-            {
-                return Ok("Login successfully");
-            }
-            else
+            var Id = _userRepository.Login(user);
+            if (Id < 0)
             {
                 return BadRequest("Login Error");
             }
+            return Ok(Id);
         }
 
         [HttpGet]

@@ -54,11 +54,15 @@ namespace Lazada.Repository
             return user;
         }
 
-        public bool Login(User_login user)
+        public long Login(User_login user)
         {
            var userobj = _context.Users.Where(s => s.Name == user.Name
                                                 && s.Password == user.Password).FirstOrDefault();
-           return userobj != null;
+            if(userobj == null)
+            {
+                return -1;
+            }
+            return userobj.Id;
         }
 
         public bool Register(User_register userRegister)

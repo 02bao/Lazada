@@ -7,7 +7,7 @@ namespace Lazada.Interface
         ICollection<User> GetUser();
         User GetById(long id);
         bool Register(User_register userRegister);
-        bool Login(User_login user);
+        long Login(User_login user);
         bool Update(User_update user);
         bool Delete(long id);
         Task<string> ForgetPassword(User_Forget password);

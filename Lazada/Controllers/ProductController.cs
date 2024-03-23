@@ -72,5 +72,13 @@ namespace Lazada.Controllers
             return Ok(product);
         }
 
+        [HttpGet("GetProductsByShopId")]
+        public IActionResult GetProductsByShopId(long shopid)
+        {
+            var products = _productRepository.GetProductsByShopId(shopid);
+            return Ok(products);
+        }
+         
+
     }
 }

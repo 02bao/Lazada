@@ -84,6 +84,22 @@ namespace Lazada.Repository
             return productcategory;
         }
 
+        public List<Product_Shop> GetProductsByShopId(long shopid)
+        {
+            var products = _context.Products.Where(s => s.Shop.Id == shopid).ToList();
+            List<Product_Shop> response = new List<Product_Shop>();
+            foreach(var product in products)
+            {
+                response.Add(new Product_Shop
+                {
+                    ProductName= product.ProductName,
+                    ProductPrice= product.ProductPrice,
+                    Brand= product.Brand,
+                });
+            }
+            return response;
+        }
+
         public bool UpdateProduct(Product_update productupdate)
         {
             var products = _context.Products.SingleOrDefault(s => s.Id ==  productupdate.Id);

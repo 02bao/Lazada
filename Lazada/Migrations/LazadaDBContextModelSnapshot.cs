@@ -217,10 +217,6 @@ namespace Lazada.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Sanpham")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
@@ -389,7 +385,7 @@ namespace Lazada.Migrations
                         .IsRequired();
 
                     b.HasOne("Lazada.Models.Shop", "Shop")
-                        .WithMany()
+                        .WithMany("Product")
                         .HasForeignKey("ShopId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -434,6 +430,8 @@ namespace Lazada.Migrations
             modelBuilder.Entity("Lazada.Models.Shop", b =>
                 {
                     b.Navigation("Category");
+
+                    b.Navigation("Product");
 
                     b.Navigation("Voucher");
                 });

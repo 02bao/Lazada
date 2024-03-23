@@ -10,5 +10,6 @@ namespace Lazada.Interface
         bool UpdateProduct(Product_update productupdate);
         bool DeleteProduct(long id);
         List<Product_category> GetProductByCategoryId(long categoryid);
+        List<Product_Shop> GetProductsByShopId(long shopid);
     }
 }

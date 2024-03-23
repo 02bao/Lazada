@@ -21,12 +21,9 @@ namespace Lazada.Repository
             {
                 return false;
             }
-            if(addvoucher.type)
-            {
                 Voucher allshop = new Voucher
                 {
                     title = addvoucher.title,
-                    type = addvoucher.type,
                     public_date = addvoucher.public_date,
                     expire_date = addvoucher.expire_date,
                     discount = addvoucher.discount,
@@ -34,21 +31,7 @@ namespace Lazada.Repository
                 };
                 _context.Vouchers.Add(allshop);
                 shops.Voucher.Add(allshop);
-            }
-            else
-            {
-                Voucher someproduct = new Voucher
-                {
-                    title = addvoucher.title,
-                    type = addvoucher.type,
-                    public_date = addvoucher.public_date,
-                    expire_date = addvoucher.expire_date,
-                    discount = addvoucher.discount,
-                    list_product_applied = addvoucher.list_product_applied,
-                };
-                _context.Vouchers.Add(someproduct);
-                shops.Voucher.Add(someproduct);
-            }
+           
             _context.SaveChanges();
             return true;
         }
