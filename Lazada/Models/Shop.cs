@@ -10,6 +10,7 @@
         public string Address { get; set; }
         public User User { get; set; }
         public List<Category> Category { get; set; }
+        public List<Voucher>? Voucher { get; set; }
     }
 
     public class Shop_Create
