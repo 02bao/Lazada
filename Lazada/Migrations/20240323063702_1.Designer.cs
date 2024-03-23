@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lazada.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    [Migration("20240323060847_1")]
+    [Migration("20240323063702_1")]
     partial class _1
     {
         /// <inheritdoc />
@@ -177,9 +177,8 @@ namespace Lazada.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ProductPrice")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long>("ProductPrice")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ShopId")
                         .HasColumnType("bigint");

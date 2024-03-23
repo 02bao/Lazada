@@ -23,7 +23,7 @@
     {
         public long Product_Id { get; set; }
         public string productname { get; set; }
-        public string productprice { get; set; }
+        public long productprice { get; set; }
         public long cartitem_id { get; set; }
         public string? option { get; set; }
         public int quantity { get; set; }

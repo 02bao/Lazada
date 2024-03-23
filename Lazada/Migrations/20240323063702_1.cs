@@ -164,7 +164,7 @@ namespace Lazada.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ProductName = table.Column<string>(type: "text", nullable: false),
-                    ProductPrice = table.Column<string>(type: "text", nullable: false),
+                    ProductPrice = table.Column<long>(type: "bigint", nullable: false),
                     Color = table.Column<string>(type: "text", nullable: false),
                     Sold = table.Column<int>(type: "integer", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: false),

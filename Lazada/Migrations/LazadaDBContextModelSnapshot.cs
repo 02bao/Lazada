@@ -174,9 +174,8 @@ namespace Lazada.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("ProductPrice")
-                        .IsRequired()
-                        .HasColumnType("text");
+                    b.Property<long>("ProductPrice")
+                        .HasColumnType("bigint");
 
                     b.Property<long>("ShopId")
                         .HasColumnType("bigint");

@@ -22,7 +22,7 @@
         public long Id { get; set; }
         public long Product_Id { get; set; }
         public string ProductName { get; set; }
-        public string ProductPrice { get; set; }
+        public long ProductPrice { get; set; }
         public string Color { get; set; }
         public int quantity { get; set; } = 1;
     }

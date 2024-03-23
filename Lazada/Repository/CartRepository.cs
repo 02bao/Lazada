@@ -13,20 +13,21 @@ namespace Lazada.Repository
         {
             _context = context;
         }
-        public bool AddtoCart(long userId, long ProductId, CartItem_add cartItem_Add)
+        public bool AddtoCart(long userId, CartItem_add cartItem_Add)
         {
             var user = _context.Users.SingleOrDefault(s => s.Id == userId);
             if (user == null)
             {
                 return false;
             }
-            var product = _context.Products.Include(s => s.Shop).SingleOrDefault(p => p.Id == ProductId);
+            var product = _context.Products.Include(s => s.Shop).SingleOrDefault(p => p.Id == cartItem_Add.Id);
             if (product == null)
             {
                 return false;
             }
 
-            var userCart = _context.Carts.Include(s => s.CartItems).SingleOrDefault(s => s.Users.Id == userId);
+            var userCart = _context.Carts.Include(s => s.CartItems)
+                .ThenInclude(s => s.Product).SingleOrDefault(s => s.Users.Id == userId);
 
             if (userCart == null)
             {
@@ -38,7 +39,7 @@ namespace Lazada.Repository
                 };
                 _context.Carts.Add(userCart);
             }
-            var ExistsCartItem = userCart.CartItems.SingleOrDefault(s => s.Product.Id == ProductId);
+            var ExistsCartItem = userCart.CartItems.SingleOrDefault(s => s.Product.Id == cartItem_Add.Id);
             if(ExistsCartItem == null)
             {
 
@@ -48,7 +49,7 @@ namespace Lazada.Repository
                     option = cartItem_Add.option,
                     quantity = cartItem_Add.quantity,
                 };
-            userCart.CartItems.Add(cartitem);
+                userCart.CartItems.Add(cartitem);
             }
             else
             {
@@ -68,6 +69,10 @@ namespace Lazada.Repository
             else
             {
                 cartitems.quantity -= 1;
+                if(cartitems.quantity == 0)
+                {
+                    RemoveCartItem( cartitemid);
+                }
                 _context.SaveChanges();
                 return true;
             }
@@ -96,6 +101,7 @@ namespace Lazada.Repository
                         list_cartitem = userCart.CartItems.Select(ci => new CartItem_see
                         {
                             Id = ci.Id,
+                            Product_Id = ci.Product.Id,
                             ProductName = ci.Product.ProductName,
                             ProductPrice = ci.Product.ProductPrice,
                             Color = ci.option,
@@ -126,25 +132,14 @@ namespace Lazada.Repository
 
         }
 
-        public bool RemoveCartItem(long userId, long cartitemId)
+        public bool RemoveCartItem( long cartitemId)
         {
-            var users = _context.Users.SingleOrDefault(s => s.Id == userId);
-            if(users == null)
+            var cartitem = _context.CartItems.SingleOrDefault(s => s.Id == cartitemId);
+            if(cartitem == null)
             {
-                return false;
+                return false ;
             }
-            var userCart = _context.Carts.Include(s => s.CartItems)
-                                         .SingleOrDefault(c => c.Users.Id == userId);
-            if(userCart == null)
-            {
-                return false;
-            }
-            var cartitemRemove = userCart.CartItems.SingleOrDefault(s => s.Id == cartitemId);
-            if(cartitemRemove == null)
-            {
-                return false;
-            }
-            userCart.CartItems.Remove(cartitemRemove);
+            _context.CartItems.Remove(cartitem);
             _context.SaveChanges();
             return true;
         }

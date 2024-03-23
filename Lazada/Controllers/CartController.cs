@@ -16,9 +16,9 @@ namespace Lazada.Controllers
         }
 
         [HttpPost("AddToCart")]
-        public IActionResult AddtoCart(long userId, long productId, CartItem_add cartItem_Add)
+        public IActionResult AddtoCart(long userId, CartItem_add cartItem_Add)
         {
-            bool tmp = _cartRepository.AddtoCart(userId, productId, cartItem_Add);
+            bool tmp = _cartRepository.AddtoCart(userId, cartItem_Add);
             if(tmp)
             {
                 return Ok("Add Successfully");
@@ -56,9 +56,9 @@ namespace Lazada.Controllers
         }
 
         [HttpDelete("DeleteCartItem")]
-        public IActionResult DeleteCartItem(long userId, long cartItemId)
+        public IActionResult DeleteCartItem( long cartItemId)
         {
-            bool tmp = _cartRepository.RemoveCartItem(userId, cartItemId);
+            bool tmp = _cartRepository.RemoveCartItem( cartItemId);
             if( tmp )
             {
                 return Ok("Delete Successfully");
