@@ -61,5 +61,29 @@ namespace Lazada.Repository
             response = response.OrderByDescending(s => s.Address_Default).ToList();
             return response;
         }
+
+        public bool SetAddressDefault(long addressid)
+        {
+            var address = _context.Addresses.SingleOrDefault(s => s.Id ==  addressid);
+            if( address == null )
+            { 
+                return false;
+            }
+            else
+            {
+                Address existing = _context.Addresses.Where(s => s.Address_Default == true).FirstOrDefault();
+                if( existing == null )
+                {
+                    address.Address_Default = true;
+                }
+                else
+                {
+                    existing.Address_Default = false;
+                    address.Address_Default = true;
+                }
+                _context.SaveChanges();
+                return true;
+            }
+        }
     }
 }

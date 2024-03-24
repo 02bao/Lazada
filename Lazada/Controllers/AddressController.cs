@@ -32,5 +32,16 @@ namespace Lazada.Controllers
             var tmp = _addressRepository.GetAddressByUserId(userId);
             return Ok(tmp);
         }
+
+        [HttpPut("SetAddressDefault")]
+        public IActionResult SetAddressDefault(long addressid)
+        {
+            bool tmp = _addressRepository.SetAddressDefault(addressid);
+            if(tmp)
+            {
+                return Ok("Setup Successfully");
+            }
+            return BadRequest("Error");
+        }
     }
 }
