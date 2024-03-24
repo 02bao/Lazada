@@ -25,5 +25,12 @@ namespace Lazada.Controllers
             }
             return BadRequest("Error");
         }
+
+        [HttpGet("GetAddressByUserId")]
+        public IActionResult GetAddressByUserId(long userId)
+        {
+            var tmp = _addressRepository.GetAddressByUserId(userId);
+            return Ok(tmp);
+        }
     }
 }

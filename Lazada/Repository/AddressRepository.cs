@@ -38,5 +38,28 @@ namespace Lazada.Repository
             _context.SaveChanges();
             return true;
         }
+
+        public List<Address_Short> GetAddressByUserId(long userId)
+        {
+            List<Address_Short> response = new List<Address_Short>();
+            var user = _context.Users.SingleOrDefault(s => s.Id ==  userId);    
+            if( user == null ) { return response; }
+            List<Address> addresses = _context.Addresses.Include(s => s.Users)
+                                      .Where(s => s.Users == user).ToList();
+            foreach( Address address in addresses )
+            {
+                Address_Short item = new Address_Short
+                {
+                    Address_Id = address.Id,
+                    Fullname = address.Fullname,
+                    Phone = address.Phone,
+                    Address_Default = address.Address_Default,
+                    Address_Full = address.City + " " + address.Address_Detail,
+                };
+                response.Add(item);
+            }
+            response = response.OrderByDescending(s => s.Address_Default).ToList();
+            return response;
+        }
     }
 }
