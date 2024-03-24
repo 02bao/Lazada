@@ -13,6 +13,7 @@ namespace Lazada.Data
         public DbSet<CartItem> CartItems { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         public static string configsql = "Host=localhost:5432;Database=Lazada;Username=postgres;Password=postgres";
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
