@@ -121,24 +121,24 @@ namespace Lazada.Repository
 
         public bool warehouse_save(long userid, long voucherid)
         {
-            var user = _context.Users.SingleOrDefault(s => s.Id==userid);
+            var user = _context.Users.Include(u => u.vouchers).SingleOrDefault(s => s.Id==userid);
             if(user == null) { return false;}
             var voucher = _context.Vouchers.SingleOrDefault(s => s.Id == voucherid);
             if(voucher == null) { return false; }
-            if(voucher != null && user.vouchers.Any())
+           if(user.vouchers == null)
+            {
+                user.vouchers = new List<Voucher>();
+            }
+           else
             {
                 if(user.vouchers.Contains(voucher))
                 {
                     return false;
                 }
-                else
-                {
-                    List<Voucher> vouchers = new List<Voucher>();
-                    vouchers.Insert(0, voucher);
-                    user.vouchers = vouchers;
-                    _context.SaveChanges();
-                }
+
             }
+            user.vouchers.Add(voucher);
+            _context.SaveChanges();
             return true;
         }
     }
