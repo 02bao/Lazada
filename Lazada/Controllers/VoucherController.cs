@@ -46,5 +46,16 @@ namespace Lazada.Controllers
             var tmp = _voucherRepository.WareHouseShopVoucher(userid);
             return Ok(tmp);
         }
+
+        [HttpPost("WareShop_save")]
+        public IActionResult WareShop_save(long userid , long voucherid)
+        {
+            bool tmp = _voucherRepository.warehouse_save(userid, voucherid);
+            if(tmp)
+            {
+                return Ok("Successfully");
+            }
+            return BadRequest("Error");
+        }
     }
 }

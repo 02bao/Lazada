@@ -9,7 +9,7 @@
         public string Address { get; set; }
         public string Phone { get; set; }
         public List<Shop>? shops { get; set; }
-        public List<Voucher> vouchers { get; set; }
+        public List<Voucher>? vouchers { get; set; }
     }
 
     public class User_register

@@ -8,5 +8,6 @@ namespace Lazada.Interface
         List<Voucher_Product> GetVoucherbyCartId(long cartid);
         List<Voucher_Product> GetVoucherbyShopid(long shopid);
         List<Voucher_Product> WareHouseShopVoucher(long userid);
+        bool warehouse_save(long userid, long voucherid);
     }
 }

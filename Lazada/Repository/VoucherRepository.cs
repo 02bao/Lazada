@@ -118,5 +118,28 @@ namespace Lazada.Repository
             return response;
 
         }
+
+        public bool warehouse_save(long userid, long voucherid)
+        {
+            var user = _context.Users.SingleOrDefault(s => s.Id==userid);
+            if(user == null) { return false;}
+            var voucher = _context.Vouchers.SingleOrDefault(s => s.Id == voucherid);
+            if(voucher == null) { return false; }
+            if(voucher != null && user.vouchers.Any())
+            {
+                if(user.vouchers.Contains(voucher))
+                {
+                    return false;
+                }
+                else
+                {
+                    List<Voucher> vouchers = new List<Voucher>();
+                    vouchers.Insert(0, voucher);
+                    user.vouchers = vouchers;
+                    _context.SaveChanges();
+                }
+            }
+            return true;
+        }
     }
 }
