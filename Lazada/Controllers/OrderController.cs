@@ -32,5 +32,16 @@ namespace Lazada.Controllers
             var tmp = _orderRepository.GetOrderbyUserId(userId);
             return  Ok(tmp);
         }
+
+        [HttpDelete("CancleOrder")]
+        public IActionResult CancleOrder(long orderid)
+        {
+            bool tmp = _orderRepository.CancleOrder(orderid);
+            if( tmp )
+            {
+                return Ok("Cancle Successfully");
+            }
+            return BadRequest("Erorr");
+        }
     }
 }

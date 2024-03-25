@@ -29,6 +29,7 @@
 
     public class Order_Get
     {
+        public long orderid { get; set; }
         public long userId_order { get; set; }
         public string username_order { get; set; }
         public string address { get; set; }

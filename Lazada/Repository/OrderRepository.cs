@@ -66,6 +66,18 @@ namespace Lazada.Repository
             return true;
         }
 
+        public bool CancleOrder(long orderId)
+        {
+            Order orders = _context.Orders.SingleOrDefault(s => s.Id == orderId);
+            if(orders == null)
+            {
+                return false;
+            }
+            _context.Orders.Remove(orders);
+            _context.SaveChanges();
+            return true;
+        }
+
         public List<Order_Get> GetOrderbyUserId(long userId)
         {
             List<Order_Get> response = new List<Order_Get>();
@@ -77,6 +89,7 @@ namespace Lazada.Repository
             var oders = _context.Orders.Where(s => s.userId_order == userId)
                 .Select(s => new Order_Get
                 {
+                    orderid = s.Id,
                     userId_order = s.userId_order,
                     username_order = user.Name,
                     address = s.address,
@@ -91,46 +104,6 @@ namespace Lazada.Repository
 
 
 
-        //public List<Order_User> GetOrderByUserId(long userId)
-        //{
-        //    List<Order_User>  response = new List<Order_User>();
-        //    User? user = _context.Users.SingleOrDefault(s => s.Id == userId);
-        //    if(user == null) 
-        //    {
-        //        return response;
-        //    }
-        //    List<Order> orders = _context.Orders.Where( s => s.User == user)
-        //                                        .Include(p => p.Shop).ToList();
-        //    foreach(Order order in orders)
-        //    {
-        //        Order_User myorder = new Order_User();
-
-        //        List<CartItem> cartitems = new List<CartItem>();
-        //        foreach(string cartitem in order.list_cart_item)
-        //        {
-        //            //CartItem tmp = JsonConvert.DeserializeObject<CartItem>(cartitem);
-        //            //cartitems.Add(tmp);
-        //        }
-        //        List<OrderItem> orderItems = new List<OrderItem>();
-        //        foreach(CartItem item in cartitems)
-        //        {
-        //            OrderItem orderitem = new OrderItem();
-        //            orderitem.Product_Id = item.Product.Id;
-        //            orderitem.productname = item.Product.ProductName;
-        //            orderitem.productprice = item.Product.ProductPrice;
-        //            orderitem.quantity = item.quantity;
-        //            orderitem.option = item.option;
-        //            orderitem.cartitem_id = item.Id;
-        //            orderItems.Add(orderitem);
-        //        }
-        //        myorder.list_orderitem = orderItems;
-        //        myorder.orderid = order.Id;
-        //        myorder.shopname = order.Shop.Name;
-        //        myorder.shopid = order.Shop.Id;
-        //        response.Insert(0, myorder);
-        //    }
-        //    return response;
-        //}
-
+       
     }
 }
