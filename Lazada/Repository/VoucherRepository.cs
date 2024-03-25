@@ -28,6 +28,7 @@ namespace Lazada.Repository
                 public_date = addvoucher.public_date,
                 expire_date = addvoucher.expire_date,
                 discount = addvoucher.discount,
+                User = null,
             };
             _context.Vouchers.Add(allshop);
             shops.Voucher.Add(allshop);

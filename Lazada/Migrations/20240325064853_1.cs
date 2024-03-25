@@ -148,7 +148,7 @@ namespace Lazada.Migrations
                     list_product_applied = table.Column<List<string>>(type: "text[]", nullable: true),
                     list_user_applied = table.Column<List<string>>(type: "text[]", nullable: true),
                     ShopId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: true)
+                    UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -163,7 +163,8 @@ namespace Lazada.Migrations
                         name: "FK_Vouchers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(

@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lazada.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    [Migration("20240325061755_2")]
-    partial class _2
+    [Migration("20240325064853_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

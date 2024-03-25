@@ -20,35 +20,42 @@ namespace Lazada.Repository
 
         public bool AddtoOrder(long userid, long cartitemid, long voucherid)
         {
-            User user = _context.Users.SingleOrDefault( s=> s.Id == userid );
-            if(user == null)
+            User user = _context.Users.SingleOrDefault(s => s.Id == userid);
+            if (user == null)
             {
                 return false;
             }
             Address addressdefault = _context.Addresses.Where(s => s.Users.Id == userid
             && s.Address_Default).FirstOrDefault();
-            if(addressdefault == null)
+            if (addressdefault == null)
             {
                 return false;
             }
             var voucher_discount = 0;
             long Pricediscount = 0;
-            Voucher Voucherapplied = _context.Vouchers.Include(s => s.User).Where(s => s.Id == voucherid 
+            Voucher Voucherapplied = _context.Vouchers.Include(s => s.User).Where(s => s.Id == voucherid
                                         && s.User.Id == userid).FirstOrDefault();
             if (Voucherapplied != null)
             {
                 voucher_discount = Voucherapplied.discount;
             }
-            CartItem cartItem = _context.CartItems.Where(s => s.Id == cartitemid &&
+            CartItem cartItem = _context.CartItems.Include(s => s.Product).Include(s => s.Carts).ThenInclude(s => s.Shops)
+                .Where(s => s.Id == cartitemid &&
                s.Carts.Users.Id == userid && s.Status == Status_cart_item.active).FirstOrDefault();
             if (cartItem != null)
             {
                 Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
                 cartItem.Status = Status_cart_item.order;
             }
+            Shop shop = _context.Shops.SingleOrDefault(s => s.Id == cartItem.Carts.Shops.Id);
+            if (shop == null)
+            {
+                return false;
+            }
             Order newOrder = new Order
             {
                 username_order = user.Name,
+                shoprname_order = shop.Name,
                 address = user.Address,
                 TotalPrice = Pricediscount,
                 CartitemName = cartItem.Product.ProductName,

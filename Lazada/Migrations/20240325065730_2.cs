@@ -18,19 +18,16 @@ namespace Lazada.Migrations
                 name: "UserId",
                 table: "Vouchers",
                 type: "bigint",
-                nullable: false,
-                defaultValue: 0L,
+                nullable: true,
                 oldClrType: typeof(long),
-                oldType: "bigint",
-                oldNullable: true);
+                oldType: "bigint");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Vouchers_Users_UserId",
                 table: "Vouchers",
                 column: "UserId",
                 principalTable: "Users",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
         }
 
         /// <inheritdoc />
@@ -44,16 +41,19 @@ namespace Lazada.Migrations
                 name: "UserId",
                 table: "Vouchers",
                 type: "bigint",
-                nullable: true,
+                nullable: false,
+                defaultValue: 0L,
                 oldClrType: typeof(long),
-                oldType: "bigint");
+                oldType: "bigint",
+                oldNullable: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Vouchers_Users_UserId",
                 table: "Vouchers",
                 column: "UserId",
                 principalTable: "Users",
-                principalColumn: "Id");
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
         }
     }
 }

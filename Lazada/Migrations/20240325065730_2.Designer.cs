@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Lazada.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lazada.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    partial class LazadaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240325065730_2")]
+    partial class _2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,20 +174,16 @@ namespace Lazada.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long?>("ShopId")
+                    b.Property<long>("ShopId")
                         .HasColumnType("bigint");
 
                     b.Property<long>("TotalPrice")
                         .HasColumnType("bigint");
 
-                    b.Property<long?>("UserId")
+                    b.Property<long>("UserId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("shoprname_order")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -438,11 +437,15 @@ namespace Lazada.Migrations
                 {
                     b.HasOne("Lazada.Models.Shop", "Shop")
                         .WithMany()
-                        .HasForeignKey("ShopId");
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Lazada.Models.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Shop");
 

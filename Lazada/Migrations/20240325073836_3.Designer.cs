@@ -13,8 +13,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lazada.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    [Migration("20240325055132_1")]
-    partial class _1
+    [Migration("20240325073836_3")]
+    partial class _3
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -184,6 +184,10 @@ namespace Lazada.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("address")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("shoprname_order")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -490,11 +494,13 @@ namespace Lazada.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Lazada.Models.User", null)
+                    b.HasOne("Lazada.Models.User", "User")
                         .WithMany("vouchers")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Shop");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Lazada.Models.Cart", b =>
