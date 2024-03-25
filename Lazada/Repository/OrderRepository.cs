@@ -33,8 +33,9 @@ namespace Lazada.Repository
             }
             var voucher_discount = 0;
             long Pricediscount = 0;
-            Voucher Voucherapplied = user.vouchers.SingleOrDefault( s=> s.Id == voucherid );
-            if(Voucherapplied != null)
+            Voucher Voucherapplied = _context.Vouchers.Include(s => s.User).Where(s => s.Id == voucherid 
+                                        && s.User.Id == userid).FirstOrDefault();
+            if (Voucherapplied != null)
             {
                 voucher_discount = Voucherapplied.discount;
             }

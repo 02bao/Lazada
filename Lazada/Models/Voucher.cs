@@ -10,6 +10,7 @@
         public List<string>? list_product_applied { get; set; }
         public List<string>? list_user_applied { get; set; }
         public Shop Shop { get; set; }
+        public User User { get; set; }
     }
 
     public class Voucher_Add
