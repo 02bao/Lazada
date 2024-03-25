@@ -18,67 +18,48 @@ namespace Lazada.Repository
             _context = context;
         }
 
-        public bool AddtoOrder(List<long> cartitem_id, long addressid, List<long> voucherid)
+        public bool AddtoOrder(long userid, long cartitemid, long voucherid)
         {
-            Order newOrder = new Order();
-            newOrder.voucher = new List<string>();
-            List<CartItem> list_cartitem = _context.CartItems.Include(s => s.Product)
-                          .Where(s => cartitem_id.Contains(s.Id)).Include(s => s.Carts)
-                          .ThenInclude(s => s.Shops).ToList();
-            if (!list_cartitem.Any())
+            User user = _context.Users.SingleOrDefault( s=> s.Id == userid );
+            if(user == null)
             {
                 return false;
             }
-            Address address = _context.Addresses.Include(s => s.Users).SingleOrDefault(s => s.Id == addressid);
-            if(address == null)
+            Address addressdefault = _context.Addresses.Where(s => s.Users.Id == userid
+            && s.Address_Default).FirstOrDefault();
+            if(addressdefault == null)
             {
                 return false;
             }
-            List<Voucher> list_voucher = _context.Vouchers.Where(s => voucherid.Contains(s.Id)).ToList();
-            if (list_voucher.Any())
+            var voucher_discount = 0;
+            long Pricediscount = 0;
+            Voucher Voucherapplied = user.vouchers.SingleOrDefault( s=> s.Id == voucherid );
+            if(Voucherapplied != null)
             {
-                foreach(Voucher item in list_voucher)
-                {
-                    item.list_user_applied.Add(address.Users.Id.ToString());
-                    string data = JsonConvert.SerializeObject(item);
-                    newOrder.voucher.Add(data);
-                }
+                voucher_discount = Voucherapplied.discount;
             }
-            User user = address.Users;
-            List<CartItem> tmp = list_cartitem;
-            while(tmp.Where(s => s.Status == Status_cart_item.active).Count() > 0)
+            CartItem cartItem = _context.CartItems.Where(s => s.Id == cartitemid &&
+               s.Carts.Users.Id == userid && s.Status == Status_cart_item.active).FirstOrDefault();
+            if (cartItem != null)
             {
-                Shop shop = _context.Shops.Where(s => s.Id == tmp[0].Carts.Shops.Id).FirstOrDefault();
-                newOrder.User = user;
-                newOrder.Shop = shop;
-                newOrder.address = JsonConvert.SerializeObject(address, Formatting.Indented, 
-                    new JsonSerializerSettings
-                    {
-                        ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore,
-                    });
-                List<string> seri_cartitem = new List<string>();
-                for(int i = 0; i< tmp.Count; i++)   
-                {
-                    if (tmp[i].Carts.Shops.Id == shop.Id)
-                    {
-                        list_cartitem[i].Status = Status_cart_item.order;
-                        list_cartitem[i].order = newOrder;
-                        string data = JsonConvert.SerializeObject(list_cartitem[i], Formatting.Indented,
-                            new JsonSerializerSettings
-                            {
-                                ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore,
-                            });
-                        seri_cartitem.Add(data);
-                    }
-                }
-                newOrder.list_cart_item = seri_cartitem;
-                _context.Orders.Add(newOrder);
+                Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
+                cartItem.Status = Status_cart_item.order;
             }
+            Order newOrder = new Order
+            {
+                username_order = user.Name,
+                address = user.Address,
+                TotalPrice = Pricediscount,
+                CartitemName = cartItem.Product.ProductName,
+            };
+            _context.Orders.Add(newOrder);
             _context.SaveChanges();
             return true;
         }
 
-        
+
+
+
 
         //public List<Order_User> GetOrderByUserId(long userId)
         //{

@@ -46,6 +46,9 @@ namespace Lazada.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<long?>("OrderId")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("text");
@@ -54,6 +57,8 @@ namespace Lazada.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("UsersId");
 
@@ -93,9 +98,6 @@ namespace Lazada.Migrations
 
                     b.Property<long>("CartsId")
                         .HasColumnType("bigint");
-
-                    b.Property<int>("MyProperty")
-                        .HasColumnType("integer");
 
                     b.Property<long>("ProductId")
                         .HasColumnType("bigint");
@@ -165,7 +167,14 @@ namespace Lazada.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<string>("CartitemName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<long>("ShopId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("TotalPrice")
                         .HasColumnType("bigint");
 
                     b.Property<long>("UserId")
@@ -175,15 +184,15 @@ namespace Lazada.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<List<string>>("list_cart_item")
-                        .IsRequired()
-                        .HasColumnType("text[]");
-
                     b.Property<int>("status")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("time")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("username_order")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<List<string>>("voucher")
                         .HasColumnType("text[]");
@@ -353,6 +362,10 @@ namespace Lazada.Migrations
 
             modelBuilder.Entity("Lazada.Models.Address", b =>
                 {
+                    b.HasOne("Lazada.Models.Order", null)
+                        .WithMany("Address")
+                        .HasForeignKey("OrderId");
+
                     b.HasOne("Lazada.Models.User", "Users")
                         .WithMany()
                         .HasForeignKey("UsersId")
@@ -396,7 +409,7 @@ namespace Lazada.Migrations
                         .IsRequired();
 
                     b.HasOne("Lazada.Models.Order", "order")
-                        .WithMany()
+                        .WithMany("list_cart_item")
                         .HasForeignKey("orderId");
 
                     b.Navigation("Carts");
@@ -489,6 +502,13 @@ namespace Lazada.Migrations
             modelBuilder.Entity("Lazada.Models.Category", b =>
                 {
                     b.Navigation("Products");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Order", b =>
+                {
+                    b.Navigation("Address");
+
+                    b.Navigation("list_cart_item");
                 });
 
             modelBuilder.Entity("Lazada.Models.Shop", b =>

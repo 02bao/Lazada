@@ -5,11 +5,15 @@
         public long Id { get; set; }
         public User User { get; set; }
         public Shop Shop { get; set; }
-        public List<string> list_cart_item { get; set; }
+        public List<CartItem> list_cart_item { get; set; }
         public Status_Order status { get; set; } = Status_Order.cho_thanh_toan;
         public DateTime time { get; set; } = DateTime.UtcNow;
         public string address { get; set; }
+        public string username_order { get; set; }
+        public long TotalPrice { get; set; }
+        public string CartitemName { get; set; }
         public List<string>? voucher { get; set; }
+        public List<Address> Address { get; set; }
     }
 
     public enum Status_Order
@@ -20,7 +24,6 @@
         da_giao,
         da_huy
     }
-
     public class OrderItem
     {
         public long Product_Id { get; set; }
@@ -39,5 +42,12 @@
         public List<OrderItem> list_orderitem { get; set; } = new List<OrderItem>();
         public string order_status { get; set; }
 
+    }
+
+    public class Order_DTO
+    {
+        public long address_id { get; set; }
+        public List<long> cartitemid { get; set; }
+        public List<long > voucherid { get; set; }
     }
 }
