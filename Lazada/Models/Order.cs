@@ -26,6 +26,16 @@
         da_giao,
         da_huy
     }
+
+    public class Order_Get
+    {
+        public long userId_order { get; set; }
+        public string username_order { get; set; }
+        public string address { get; set; }
+        public string shoprname_order { get; set; }
+        public string CartitemName { get; set; }
+        public long TotalPrice { get; set; }
+    }
     public class OrderItem
     {
         public long Product_Id { get; set; }

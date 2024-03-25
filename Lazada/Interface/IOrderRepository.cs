@@ -8,6 +8,7 @@ namespace Lazada.Interface
         //bool AddtoOrder(List<long> list_cart_item_id);
         //List<Order_User> GetOrderByUserId(long userId);
         bool AddtoOrder(long userid, long cartitemid, long voucherid);
-        
+        List<Order_Get> GetOrderbyUserId(long userId);
+
     }
 }

@@ -66,6 +66,27 @@ namespace Lazada.Repository
             return true;
         }
 
+        public List<Order_Get> GetOrderbyUserId(long userId)
+        {
+            List<Order_Get> response = new List<Order_Get>();
+            User user = _context.Users.SingleOrDefault(s => s.Id == userId);
+            if(user == null)
+            {
+                return response;
+            }
+            var oders = _context.Orders.Where(s => s.userId_order == userId)
+                .Select(s => new Order_Get
+                {
+                    userId_order = s.userId_order,
+                    username_order = user.Name,
+                    address = s.address,
+                    shoprname_order = s.shoprname_order,
+                    CartitemName = s.CartitemName,
+                    TotalPrice = s.TotalPrice
+                }).ToList();
+            return oders;
+        }
+
 
 
 
