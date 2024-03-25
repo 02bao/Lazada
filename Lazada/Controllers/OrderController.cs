@@ -16,21 +16,14 @@ namespace Lazada.Controllers
         }
 
         [HttpPost("AddToOrder")]
-        public IActionResult AddToOrder( long userId, long cartitemId)
+        public IActionResult AddtoOrder(List<long> cartitemid, long addressid, List<long> voucherid)
         {
-            bool tmp = _orderRepository.AddtoOrder(userId, cartitemId);
+            bool tmp = _orderRepository.AddtoOrder(cartitemid, addressid, voucherid);
             if(tmp)
             {
-                return Ok("Add Successfully");
+                return Ok("Add Order Successfully ");
             }
             return BadRequest("Error");
-        }
-
-        [HttpGet("GetOrderByUserId")]
-        public IActionResult GetOrderByUserId(long userId)
-        {
-            var tmp = _orderRepository.GetOrderByUserId(userId);
-            return Ok(tmp);
         }
     }
 }

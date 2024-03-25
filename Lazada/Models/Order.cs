@@ -7,7 +7,9 @@
         public Shop Shop { get; set; }
         public List<string> list_cart_item { get; set; }
         public Status_Order status { get; set; } = Status_Order.cho_thanh_toan;
-        public DateTime time { get; set; }
+        public DateTime time { get; set; } = DateTime.UtcNow;
+        public string address { get; set; }
+        public List<string>? voucher { get; set; }
     }
 
     public enum Status_Order
@@ -35,6 +37,7 @@
         public string shopname { get; set; } = "";
         public long shopid { get; set; }
         public List<OrderItem> list_orderitem { get; set; } = new List<OrderItem>();
+        public string order_status { get; set; }
 
     }
 }
