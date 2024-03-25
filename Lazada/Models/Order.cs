@@ -10,6 +10,7 @@
         public DateTime time { get; set; } = DateTime.UtcNow;
         public string address { get; set; }
         public string username_order { get; set; }
+        public long userId_order { get; set; }
         public string shoprname_order { get; set; }
         public long TotalPrice { get; set; }
         public string CartitemName { get; set; }

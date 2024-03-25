@@ -54,9 +54,10 @@ namespace Lazada.Repository
             }
             Order newOrder = new Order
             {
+                userId_order = user.Id,
                 username_order = user.Name,
                 shoprname_order = shop.Name,
-                address = user.Address,
+                address = addressdefault.Address_Detail,
                 TotalPrice = Pricediscount,
                 CartitemName = cartItem.Product.ProductName,
             };
