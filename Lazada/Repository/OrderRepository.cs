@@ -86,7 +86,7 @@ namespace Lazada.Repository
             {
                 return response;
             }
-            var oders = _context.Orders.Where(s => s.User.Id == userId)
+            var orders = _context.Orders.Where(s => s.User.Id == userId)
                 .Select(s => new Order_Get
                 {
                     orderid = s.Id,
@@ -96,7 +96,7 @@ namespace Lazada.Repository
                     CartitemName = s.CartitemName,
                     TotalPrice = s.TotalPrice
                 }).ToList();
-            return oders;
+            return orders;
         }
 
 

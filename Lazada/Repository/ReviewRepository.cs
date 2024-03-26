@@ -45,5 +45,27 @@ namespace Lazada.Repository
             _context.SaveChanges();
             return true;
         }
+
+        public List<Review> GetByUserId(long userId)
+        {
+            List<Review> response = new List<Review>();
+            User user = _context.Users.SingleOrDefault( s=> s.Id == userId);
+            if(user == null)
+            {
+                return response;
+            }
+            var review = _context.Reviews.Where(s => s.User.Id == userId)
+                .Select(s => new Review
+                {
+                    Id = s.Id,
+                    User = user,
+                    CartItem = s.CartItem,
+                    Product = s.Product,
+                    rating = s.rating,
+                    descreption = s.descreption,
+                    option = s.option,
+                }).ToList();
+            return review;
+        }
     }
 }
