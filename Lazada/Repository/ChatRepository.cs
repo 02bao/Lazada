@@ -23,8 +23,8 @@ namespace Lazada.Repository
             {
                 return response;
             }
-            Shop shop = _context.Shops.SingleOrDefault(s => s.Id == shopid);
-            if(shop == null)
+            Shop shop = _context.Shops.Include(s => s.User).SingleOrDefault(s => s.Id == shopid);
+            if(shop == null || shop.User.Id == userid)
             {
                 return response;
             }
