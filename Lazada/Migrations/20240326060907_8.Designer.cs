@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Lazada.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Lazada.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    partial class LazadaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240326060907_8")]
+    partial class _8
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -167,9 +170,6 @@ namespace Lazada.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
-                    b.Property<long>("CartiteId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("CartitemName")
                         .IsRequired()
                         .HasColumnType("text");
@@ -190,11 +190,22 @@ namespace Lazada.Migrations
                     b.Property<List<string>>("list_cart_item")
                         .HasColumnType("text[]");
 
+                    b.Property<string>("shoprname_order")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<int>("status")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("time")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<long>("userId_order")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("username_order")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<List<string>>("voucher")
                         .HasColumnType("text[]");

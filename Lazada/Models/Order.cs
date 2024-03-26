@@ -9,11 +9,12 @@
         public Status_Order status { get; set; } = Status_Order.cho_thanh_toan;
         public DateTime time { get; set; } = DateTime.UtcNow;
         public string address { get; set; }
-        public string username_order { get; set; }
-        public long userId_order { get; set; }
-        public string shoprname_order { get; set; }
+        //public string username_order { get; set; }
+        //public long userId_order { get; set; }
+        //public string shoprname_order { get; set; }
         public long TotalPrice { get; set; }
         public string CartitemName { get; set; }
+        public long CartiteId { get; set; }
         public List<string>? voucher { get; set; }
         public List<Address> Address { get; set; }
     }
