@@ -1,5 +1,6 @@
 ﻿using Lazada.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic;
 
 namespace Lazada.Data
 {
@@ -15,6 +16,8 @@ namespace Lazada.Data
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<Message> Messages { get; set; }
+        public DbSet<Conversation> Conversations { get; set; }
         public static string configsql = "Host=localhost:5432;Database=Lazada;Username=postgres;Password=postgres";
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
