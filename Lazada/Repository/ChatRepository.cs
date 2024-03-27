@@ -56,5 +56,43 @@ namespace Lazada.Repository
             }
             return response;
         }
+
+        public bool NewMessage(long userid, long shopid, string mess)
+        {
+            User user = _context.Users.SingleOrDefault( s => s.Id  == userid );
+            if(user == null)
+            {
+                return false;
+            }
+            Shop shop = _context.Shops.Include( s=> s.User).SingleOrDefault(s => s.Id == shopid);
+            if(shop == null || shop.User.Id == userid)
+            {
+                return false;
+            }
+            Conversation conversation = _context.Conversations.Include(s => s.User).Include(s => s.Shop)
+                .Where(s => s.Shop == shop && s.User == user).Include( s=> s.Message).FirstOrDefault();
+            if(conversation == null)
+            {
+                conversation = new Conversation
+                {
+                    User = user,
+                    Shop = shop,
+                    is_seen = false,
+                    lasttime = DateTime.UtcNow,
+                    Message = new List<Message>()
+                };
+            _context.Conversations.Add(conversation);
+            }
+            Message NewMessage = new Message
+            {
+                type = true,
+                message = mess,
+                time = DateTime.UtcNow,
+                Conversation = conversation,
+            };
+            conversation.Message.Add(NewMessage);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

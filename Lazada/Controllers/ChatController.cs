@@ -20,5 +20,16 @@ namespace Lazada.Controllers
             var tmp = _chatRepository.GetConversation_ById(userid, shopid);
             return Ok(tmp);
         }
+
+        [HttpPost("NewMessage")]
+        public IActionResult NewMessage( long userid, long shopid, string message)
+        {
+            bool tmp = _chatRepository.NewMessage(userid, shopid, message);
+            if(tmp)
+            {
+                return Ok(tmp);
+            }
+            return BadRequest("Error");
+        }
     }
 }
