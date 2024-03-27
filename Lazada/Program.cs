@@ -1,6 +1,7 @@
 
 using Lazada.Data;
 using Lazada.Interface;
+using Lazada.Models;
 using Lazada.Repository;
 
 namespace Lazada
@@ -28,6 +29,7 @@ namespace Lazada
             builder.Services.AddScoped<IAddressRepository,AddressRepository>();
             builder.Services.AddScoped<IReviewRepository,ReviewRepository>();
             builder.Services.AddScoped<IChatRepository,ChatRepository>();
+            builder.Services.AddScoped<INotificationRepository,NotiRepository>();
 
             var app = builder.Build();
 

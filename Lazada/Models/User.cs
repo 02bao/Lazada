@@ -10,6 +10,7 @@
         public string Phone { get; set; }
         public List<Shop>? shops { get; set; }
         public List<Voucher>? vouchers { get; set; }
+        public List<Notification> notìications { get; set; }
     }
 
     public class User_register

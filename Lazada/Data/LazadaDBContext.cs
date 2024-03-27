@@ -18,6 +18,7 @@ namespace Lazada.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<Conversation> Conversations { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
         public static string configsql = "Host=localhost:5432;Database=Lazada;Username=postgres;Password=postgres";
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
