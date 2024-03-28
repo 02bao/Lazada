@@ -30,6 +30,7 @@ namespace Lazada.Repository
                 discount = addvoucher.discount,
                 User = null,
             };
+            //Voucher cho tung san pham 
             _context.Vouchers.Add(allshop);
             shops.Voucher.Add(allshop);
            
@@ -46,6 +47,7 @@ namespace Lazada.Repository
             {
                 return response;
             }
+            // van de quan ly thoi gian 
             else if(carts.Shops.Voucher.Any())
             {
                 List<Voucher> vouchers = carts.Shops.Voucher;

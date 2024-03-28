@@ -31,6 +31,8 @@ namespace Lazada.Repository
             {
                 return false;
             }
+            //Them truong hop ko co id voucher thi nhap ko vaf xu ly 
+            //quan ly tgian han su dung voucher
             var voucher_discount = 0;
             long Pricediscount = 0;
             Voucher Voucherapplied = _context.Vouchers.Include(s => s.User).Where(s => s.Id == voucherid
@@ -47,6 +49,7 @@ namespace Lazada.Repository
                 Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
                 cartItem.Status = Status_cart_item.order;
             }
+            // cartitem trang thai order roi ma shop null thi huy, vayj cartitem van la trang thai order 
             Shop shop = _context.Shops.SingleOrDefault(s => s.Id == cartItem.Carts.Shops.Id);
             if (shop == null)
             {

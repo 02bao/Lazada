@@ -20,6 +20,8 @@ namespace Lazada.Repository
             {
                 return false;
             }
+            //kiem tra danh muc khong cho trung
+
             var category = new Category()
             {
                 CategoryName = categorycreate.CategoryName,

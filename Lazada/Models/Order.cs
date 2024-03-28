@@ -9,14 +9,14 @@
         public Status_Order status { get; set; } = Status_Order.cho_thanh_toan;
         public DateTime time { get; set; } = DateTime.UtcNow;
         public string address { get; set; }
-        //public string username_order { get; set; }
-        //public long userId_order { get; set; }
-        //public string shoprname_order { get; set; }
         public long TotalPrice { get; set; }
         public string CartitemName { get; set; }
         public long CartiteId { get; set; }
         public List<string>? voucher { get; set; }
         public List<Address> Address { get; set; }
+        //Chi moi tao order cho 1 san pham , tao them order cho nhiu san pham 
+        //Tao them lay order bang shopid
+        //lay thong tin customer da tung order  hang cua shop 
     }
 
     public enum Status_Order

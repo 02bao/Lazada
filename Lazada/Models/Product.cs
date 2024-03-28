@@ -11,6 +11,8 @@
         public string Brand { get; set; }
         public Category Category { get; set; }
         public Shop Shop { get; set; }
+
+        //shop quan ly so luong san pham trong kho
     }
 
     public class Product_Create
