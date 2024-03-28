@@ -31,6 +31,7 @@ namespace Lazada.Repository
                 ProductName = productcreate.ProductName,
                 ProductPrice = productcreate.ProductPrice,
                 Color = productcreate.Color,
+                inventory = productcreate.inventory,
                 Sold = 0,
                 Description="",
                 Brand="",
@@ -79,6 +80,7 @@ namespace Lazada.Repository
                     Sold = product.Sold,
                     Color = product.Color,
                     Brand = product.Brand,
+                    inventory = product.inventory,
                 });
             }
             return productcategory;
@@ -96,6 +98,7 @@ namespace Lazada.Repository
                     ProductName= product.ProductName,
                     ProductPrice= product.ProductPrice,
                     Brand= product.Brand,
+                    inventory= product.inventory,
                 });
             }
             return response;
@@ -111,6 +114,7 @@ namespace Lazada.Repository
             products.Sold = productupdate.Sold;
             products.Description = productupdate.Description;
             products.Brand = productupdate.Brand;
+            products.inventory = productupdate.inventory;
             _context.SaveChanges();
             return true;
         }

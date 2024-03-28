@@ -34,7 +34,6 @@ namespace Lazada.Repository
             var users = await _context.Users.FirstOrDefaultAsync(u =>
                 u.Name == password.Name
                 && u.Email == password.Email
-                && u.Address == password.Address
                 && u.Phone == password.Phone);
             if(users == null)
             {
@@ -78,7 +77,6 @@ namespace Lazada.Repository
                 Name = userRegister.Name,
                 Email = userRegister.Email,
                 Password = userRegister.Password,
-                Address = "",
                 Phone = ""
             };
             _context.Users.Add(user);
@@ -94,7 +92,6 @@ namespace Lazada.Repository
                 return false;
             }
             user.Password = userupdate.Password;
-            user.Address = userupdate.Address;
             user.Phone = userupdate.Phone;
             _context.SaveChanges();
             return true;

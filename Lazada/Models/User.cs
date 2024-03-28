@@ -6,7 +6,6 @@
         public string Name { get; set; }
         public string Email { get; set; }
         public string Password { get; set; }
-        public string Address { get; set; } //xoa di vi co controller address
         public string Phone { get; set; }
         public List<Shop>? shops { get; set; }
         public List<Voucher>? vouchers { get; set; }
@@ -31,7 +30,6 @@
     {
         public long Id { get; set; } = DateTime.UtcNow.Ticks/100;
         public string Password { get; set; }
-        public string Address { get; set; }
         public string Phone { get; set; }
     }
 
@@ -40,7 +38,6 @@
         public long Id { get; set; } = DateTime.UtcNow.Ticks / 100;
         public string Name { get; set; }
         public string Email { get; set; }
-        public string Address { get; set; }
         public string Phone { get; set; }
     }
 }
