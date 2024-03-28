@@ -86,6 +86,7 @@ namespace Lazada.Repository
                         title = voucher.title,
                         discount = voucher.discount,
                         productvoucherid = voucher.productvoucherid,
+                        expire_date = voucher.expire_date,
                     };
                     response.Add(tmp);
                 }
@@ -117,6 +118,7 @@ namespace Lazada.Repository
                         title = item.title,
                         discount = item.discount,
                         productvoucherid = item.productvoucherid,
+                        expire_date = item.expire_date,
                     };
                     response.Add(tmp);
                 }
@@ -146,6 +148,7 @@ namespace Lazada.Repository
                         voucherId=item.Id,
                         title = item.title,
                         discount = item.discount,
+                        expire_date = item.expire_date,
                         productvoucherid = item.productvoucherid,
                     };
                     response.Add(tmp);
@@ -160,7 +163,7 @@ namespace Lazada.Repository
             var user = _context.Users.Include(u => u.vouchers).SingleOrDefault(s => s.Id==userid);
             if(user == null) { return false;}
             var voucher = _context.Vouchers.Include(s => s.Shop).SingleOrDefault(s => s.Id == voucherid && s.expire_date > DateTime.UtcNow
-            && s.user_applyid == null);
+            && s.User == null);
             if(voucher == null) { return false; }
             //kiem tra xem id cua nguoi tao ra shop co trung voi id cua nguoi muon lay voucher
             Shop shops = _context.Shops.Include(s => s.User).Where(s => s.User.Id == user.Id).FirstOrDefault();
@@ -180,7 +183,7 @@ namespace Lazada.Repository
                 }
 
             }
-            voucher.user_applyid = user.Id;
+            voucher.User = user;
             user.vouchers.Add(voucher);
             _context.SaveChanges();
             return true;

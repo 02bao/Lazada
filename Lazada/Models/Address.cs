@@ -9,6 +9,7 @@
         public string City { get; set; }
         public string Address_Detail { get; set; }
         public bool Address_Default { get; set; } = false;
+        public List<Order> Order { get; set; }
     }
 
     public class Address_User

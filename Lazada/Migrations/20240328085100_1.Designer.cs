@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Taka.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    [Migration("20240328034010_1")]
+    [Migration("20240328085100_1")]
     partial class _1
     {
         /// <inheritdoc />
@@ -49,9 +49,6 @@ namespace Taka.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<long?>("OrderId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Phone")
                         .IsRequired()
                         .HasColumnType("text");
@@ -60,8 +57,6 @@ namespace Taka.Migrations
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
 
                     b.HasIndex("UsersId");
 
@@ -80,6 +75,12 @@ namespace Taka.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<long>("UsersId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("creat_at")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("modified_at")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
@@ -107,6 +108,12 @@ namespace Taka.Migrations
 
                     b.Property<int>("Status")
                         .HasColumnType("integer");
+
+                    b.Property<DateTime>("create_at")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("modified_at")
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("option")
                         .IsRequired()
@@ -273,6 +280,9 @@ namespace Taka.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long>("AddressId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("CartiteId")
                         .HasColumnType("bigint");
 
@@ -289,23 +299,18 @@ namespace Taka.Migrations
                     b.Property<long?>("UserId")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("address")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<List<string>>("list_cart_item")
-                        .HasColumnType("text[]");
-
                     b.Property<int>("status")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("time")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<List<string>>("voucher")
-                        .HasColumnType("text[]");
+                    b.Property<List<long>>("voucher")
+                        .HasColumnType("bigint[]");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("AddressId");
 
                     b.HasIndex("ShopId");
 
@@ -316,11 +321,11 @@ namespace Taka.Migrations
 
             modelBuilder.Entity("Lazada.Models.Product", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<long>("ProductId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("ProductId"));
 
                     b.Property<string>("Brand")
                         .IsRequired()
@@ -353,7 +358,7 @@ namespace Taka.Migrations
                     b.Property<int>("inventory")
                         .HasColumnType("integer");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductId");
 
                     b.HasIndex("CategoryId");
 
@@ -471,6 +476,9 @@ namespace Taka.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
 
+                    b.Property<long?>("ProductId")
+                        .HasColumnType("bigint");
+
                     b.Property<long>("ShopId")
                         .HasColumnType("bigint");
 
@@ -483,11 +491,8 @@ namespace Taka.Migrations
                     b.Property<DateTime>("expire_date")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<List<string>>("list_product_applied")
-                        .HasColumnType("text[]");
-
-                    b.Property<List<string>>("list_user_applied")
-                        .HasColumnType("text[]");
+                    b.Property<long?>("productvoucherid")
+                        .HasColumnType("bigint");
 
                     b.Property<DateTime>("public_date")
                         .HasColumnType("timestamp with time zone");
@@ -498,6 +503,8 @@ namespace Taka.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ProductId");
+
                     b.HasIndex("ShopId");
 
                     b.HasIndex("UserId");
@@ -507,10 +514,6 @@ namespace Taka.Migrations
 
             modelBuilder.Entity("Lazada.Models.Address", b =>
                 {
-                    b.HasOne("Lazada.Models.Order", null)
-                        .WithMany("Address")
-                        .HasForeignKey("OrderId");
-
                     b.HasOne("Lazada.Models.User", "Users")
                         .WithMany()
                         .HasForeignKey("UsersId")
@@ -554,7 +557,7 @@ namespace Taka.Migrations
                         .IsRequired();
 
                     b.HasOne("Lazada.Models.Order", "order")
-                        .WithMany()
+                        .WithMany("list_cartitem")
                         .HasForeignKey("orderId");
 
                     b.Navigation("Carts");
@@ -622,6 +625,12 @@ namespace Taka.Migrations
 
             modelBuilder.Entity("Lazada.Models.Order", b =>
                 {
+                    b.HasOne("Lazada.Models.Address", "Address")
+                        .WithMany("Order")
+                        .HasForeignKey("AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Lazada.Models.Shop", "Shop")
                         .WithMany()
                         .HasForeignKey("ShopId");
@@ -629,6 +638,8 @@ namespace Taka.Migrations
                     b.HasOne("Lazada.Models.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Address");
 
                     b.Navigation("Shop");
 
@@ -694,6 +705,10 @@ namespace Taka.Migrations
 
             modelBuilder.Entity("Lazada.Models.Voucher", b =>
                 {
+                    b.HasOne("Lazada.Models.Product", null)
+                        .WithMany("Voucher")
+                        .HasForeignKey("ProductId");
+
                     b.HasOne("Lazada.Models.Shop", "Shop")
                         .WithMany("Voucher")
                         .HasForeignKey("ShopId")
@@ -707,6 +722,11 @@ namespace Taka.Migrations
                     b.Navigation("Shop");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Address", b =>
+                {
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("Lazada.Models.Cart", b =>
@@ -726,7 +746,12 @@ namespace Taka.Migrations
 
             modelBuilder.Entity("Lazada.Models.Order", b =>
                 {
-                    b.Navigation("Address");
+                    b.Navigation("list_cartitem");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Product", b =>
+                {
+                    b.Navigation("Voucher");
                 });
 
             modelBuilder.Entity("Lazada.Models.Shop", b =>

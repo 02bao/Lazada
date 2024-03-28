@@ -1,6 +1,7 @@
 ﻿using Lazada.Data;
 using Lazada.Interface;
 using Lazada.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Linq;
@@ -18,7 +19,7 @@ namespace Lazada.Repository
             _context = context;
         }
 
-        public bool AddtoOrder(long userid, long cartitemid, long voucherid)
+        public bool AddtoOrder(long userid, List<long> cartitemids, long voucherid)
         {
             User user = _context.Users.SingleOrDefault(s => s.Id == userid);
             if (user == null)
@@ -31,38 +32,62 @@ namespace Lazada.Repository
             {
                 return false;
             }
-            //Them truong hop ko co id voucher thi nhap ko vaf xu ly 
+
+            //Them truong hop ko co id voucher thi nhap ko va xu ly 
             //quan ly tgian han su dung voucher
             var voucher_discount = 0;
             long Pricediscount = 0;
-            Voucher Voucherapplied = _context.Vouchers.Include(s => s.User).Where(s => s.Id == voucherid
-                                        && s.User.Id == userid).FirstOrDefault();
-            if (Voucherapplied != null)
+            List<CartItem> orderItems = new List<CartItem>();
+            foreach(var cartitemid in cartitemids)
             {
-                voucher_discount = Voucherapplied.discount;
+                var cartItem = _context.CartItems.Include(s => s.Product)
+                                                      .Include(s => s.Carts)
+                                                      .ThenInclude(s => s.Shops)
+                                                      .Where(s => s.Id == cartitemid &&
+                                                        s.Carts.Users.Id == userid && 
+                                                        s.Status == Status_cart_item.active)
+                                                      .FirstOrDefault();
+                if(cartItem != null)
+                {
+                    var Voucherapplied = _context.Vouchers.Include(s => s.User)
+                                                              .Where(s => s.Id == voucherid &&
+                                                              s.User.Id == userid && 
+                                                              s.expire_date > DateTime.Now)
+                                                              .FirstOrDefault();
+                    if (Voucherapplied != null)
+                    {
+                        voucher_discount = Voucherapplied.discount;
+                    }
+                    Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
+                    cartItem.Status = Status_cart_item.order;
+                    orderItems.Add(cartItem);
+                }
             }
-            CartItem cartItem = _context.CartItems.Include(s => s.Product).Include(s => s.Carts).ThenInclude(s => s.Shops)
-                .Where(s => s.Id == cartitemid &&
-               s.Carts.Users.Id == userid && s.Status == Status_cart_item.active).FirstOrDefault();
-            if (cartItem != null)
+            if (orderItems.Count == 0) 
             {
-                Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
-                cartItem.Status = Status_cart_item.order;
+                return false;
             }
+            
             // cartitem trang thai order roi ma shop null thi huy, vayj cartitem van la trang thai order 
-            Shop shop = _context.Shops.SingleOrDefault(s => s.Id == cartItem.Carts.Shops.Id);
+            Shop shop = _context.Shops.SingleOrDefault(s => s.Id == orderItems[0].Carts.Shops.Id);
             if (shop == null)
             {
+                foreach(var cartitem in orderItems)
+                {
+                    cartitem.Status = Status_cart_item.active;
+                }
+                _context.SaveChanges();
                 return false;
             }
             Order newOrder = new Order
             {
                 User = user,
                 Shop = shop,
-                address = addressdefault.Address_Detail,
+                Address = addressdefault,
                 TotalPrice = Pricediscount,
-                CartitemName = cartItem.Product.ProductName,
-                CartiteId = cartItem.Id,
+                time = DateTime.UtcNow,
+                status = Status_Order.cho_thanh_toan,
+                list_cartitem = orderItems,
             };
             _context.Orders.Add(newOrder);
             _context.SaveChanges();
@@ -89,13 +114,14 @@ namespace Lazada.Repository
             {
                 return response;
             }
+            Address address = _context.Addresses.Include(s => s.Order).SingleOrDefault(s => s.Users.Id == userId);
             var orders = _context.Orders.Where(s => s.User.Id == userId)
                 .Select(s => new Order_Get
                 {
                     orderid = s.Id,
                     userId_order = user.Id,
                     username_order = user.Name,
-                    address = s.address,
+                    address = address.Address_Default,
                     CartitemName = s.CartitemName,
                     TotalPrice = s.TotalPrice
                 }).ToList();
