@@ -25,7 +25,6 @@ namespace Lazada.Repository
             {
                 return false;
             }
-
             var userCart = _context.Carts.Include(s => s.CartItems)
                 .ThenInclude(s => s.Product).SingleOrDefault(s => s.Users.Id == userId);
 

@@ -5,8 +5,8 @@
         public long Id { get; set; }
         public Shop Shops { get; set; }
         public User Users { get; set; }
-        //public long creat_at { get; set; } = DateTime.UtcNow.Ticks / 100;
-        //public long modified_at { get; set; } = DateTime.UtcNow.Ticks / 100;
+        public long creat_at { get; set; } = DateTime.UtcNow.Ticks / 100;
+        public long modified_at { get; set; } = DateTime.UtcNow.Ticks / 100;
         public List<CartItem> CartItems { get; set; }
     }
 

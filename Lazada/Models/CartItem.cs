@@ -6,10 +6,11 @@
         public Cart Carts { get; set; }
         public Product Product { get; set; }
         public string option { get; set; }
+        public DateTime create_at { get; set; } = DateTime.Now.ToUniversalTime();
+        public DateTime modified_at { get; set; } = DateTime.Now.ToUniversalTime();
         public int quantity { get; set; } = 1;
         public Order? order { get; set; }
         public Status_cart_item Status { get; set; } = Status_cart_item.active;
-         
     }
 
     public enum Status_cart_item
