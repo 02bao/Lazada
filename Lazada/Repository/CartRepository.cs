@@ -20,7 +20,7 @@ namespace Lazada.Repository
             {
                 return false;
             }
-            var product = _context.Products.Include(s => s.Shop).SingleOrDefault(p => p.Id == cartItem_Add.Id);
+            var product = _context.Products.Include(s => s.Shop).SingleOrDefault(p => p.ProductId == cartItem_Add.Id);
             if (product == null)
             {
                 return false;
@@ -39,7 +39,7 @@ namespace Lazada.Repository
                 _context.Carts.Add(userCart);
             }
             var ExistsCartItem = userCart.CartItems.Where(s => s.Status == Status_cart_item.active
-            && s.Product.Id == cartItem_Add.Id).FirstOrDefault();
+            && s.Product.ProductId == cartItem_Add.Id).FirstOrDefault();
             if(ExistsCartItem == null)
             {
 
@@ -101,7 +101,7 @@ namespace Lazada.Repository
                         list_cartitem = userCart.CartItems.Select(ci => new CartItem_see
                         {
                             Id = ci.Id,
-                            Product_Id = ci.Product.Id,
+                            Product_Id = ci.Product.ProductId,
                             ProductName = ci.Product.ProductName,
                             ProductPrice = ci.Product.ProductPrice,
                             Color = ci.option,

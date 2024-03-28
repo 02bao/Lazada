@@ -45,7 +45,7 @@ namespace Lazada.Repository
 
         public bool DeleteProduct(long id)
         {
-            var products = _context.Products.SingleOrDefault(s => s.Id == id);
+            var products = _context.Products.SingleOrDefault(s => s.ProductId == id);
             if(products == null)
             {
                 return false;
@@ -57,7 +57,7 @@ namespace Lazada.Repository
 
         public Product GetById(long id)
         {
-            var product = _context.Products.SingleOrDefault(s => s.Id == id);
+            var product = _context.Products.SingleOrDefault(s => s.ProductId == id);
             return product;
         }
 
@@ -94,7 +94,7 @@ namespace Lazada.Repository
             {
                 response.Add(new Product_Shop
                 {
-                    Id = product.Id,
+                    ProductId = product.ProductId,
                     ProductName= product.ProductName,
                     ProductPrice= product.ProductPrice,
                     Brand= product.Brand,
@@ -106,7 +106,7 @@ namespace Lazada.Repository
 
         public bool UpdateProduct(Product_update productupdate)
         {
-            var products = _context.Products.SingleOrDefault(s => s.Id ==  productupdate.Id);
+            var products = _context.Products.SingleOrDefault(s => s.ProductId ==  productupdate.ProductId);
             if(products == null)
             {
                 return false;

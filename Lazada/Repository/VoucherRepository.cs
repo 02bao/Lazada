@@ -13,7 +13,7 @@ namespace Lazada.Repository
         {
             _context = context;
         }
-        public bool AddnewVoucher(long shopid, Voucher_Add addvoucher)
+        public bool AddnewVoucher(long shopid, Voucher_Add addvoucher, DateTime expiredate)
         {
             if(string.IsNullOrEmpty(addvoucher.title))
                 return false;
@@ -22,18 +22,40 @@ namespace Lazada.Repository
             {
                 return false;
             }
-            Voucher allshop = new Voucher
+            if(addvoucher.type) //true la ca shop, false la cho tung san pham 
+            { //voucher cho tat ca san pham trong shop 
+                Voucher allshop = new Voucher
+                {
+                    title = addvoucher.title,
+                    Shop = shops,
+                    type = addvoucher.type,
+                    public_date = addvoucher.public_date.ToUniversalTime(),
+                    expire_date = expiredate.ToUniversalTime(),
+                    discount = addvoucher.discount,
+                    list_product_applied = null,
+                    User = null,
+                };
+                //Voucher cho tung san pham 
+                _context.Vouchers.Add(allshop);
+                shops.Voucher.Add(allshop);
+            }
+            else
             {
-                title = addvoucher.title,
-                public_date = addvoucher.public_date,
-                expire_date = addvoucher.expire_date,
-                discount = addvoucher.discount,
-                User = null,
-            };
-            //Voucher cho tung san pham 
-            _context.Vouchers.Add(allshop);
-            shops.Voucher.Add(allshop);
-           
+                Voucher someproduct = new Voucher
+                {
+                    title = addvoucher.title,
+                    Shop = shops,
+                    type = addvoucher.type,
+                    public_date=addvoucher.public_date.ToUniversalTime(),
+                    expire_date=expiredate.ToUniversalTime(),
+                    discount = addvoucher.discount,
+                    list_product_applied = addvoucher.list_product_applied,
+                    User = null,
+                };
+                _context.Vouchers.Add(someproduct);
+                shops.Voucher.Add(someproduct);
+            }
+
             _context.SaveChanges();
             return true;
         }
@@ -53,6 +75,10 @@ namespace Lazada.Repository
                 List<Voucher> vouchers = carts.Shops.Voucher;
                 foreach(Voucher voucher in vouchers)
                 {
+                    if(voucher.expire_date.CompareTo(DateTime.Now) <= 0)
+                    {
+                        continue;
+                    }
                     Voucher_Product tmp = new Voucher_Product
                     {
                         voucherId = voucher.Id,
@@ -79,6 +105,10 @@ namespace Lazada.Repository
                 List<Voucher> shop_voucher = shops.Voucher;
                 foreach(Voucher item in  shop_voucher)
                 {
+                    if(item.expire_date.CompareTo(DateTime.Now) <= 0)
+                    {
+                        continue;
+                    }
                     Voucher_Product tmp = new Voucher_Product
                     {
                         voucherId = item.Id,
@@ -104,8 +134,8 @@ namespace Lazada.Repository
             List<Voucher>? shopvoucher = user.vouchers.ToList();
             if(shopvoucher != null && shopvoucher.Any())
             {
-                shopvoucher = shopvoucher!.Where(s => s.list_user_applied == null || 
-                    !s.list_user_applied.Contains(userid.ToString())).ToList();
+                shopvoucher = shopvoucher!.Where(s =>s.expire_date > DateTime.UtcNow && (s.list_user_applied == null || 
+                    !s.list_user_applied.Contains(userid.ToString()))).ToList();
 
                 foreach(Voucher item in shopvoucher)
                 {
@@ -126,8 +156,14 @@ namespace Lazada.Repository
         {
             var user = _context.Users.Include(u => u.vouchers).SingleOrDefault(s => s.Id==userid);
             if(user == null) { return false;}
-            var voucher = _context.Vouchers.SingleOrDefault(s => s.Id == voucherid);
+            var voucher = _context.Vouchers.SingleOrDefault(s => s.Id == voucherid && s.expire_date > DateTime.UtcNow);
             if(voucher == null) { return false; }
+            //kiem tra xem id cua nguoi tao ra shop co trung voi id cua nguoi muon lay voucher
+            Shop shops = _context.Shops.Include(s => s.User).Where(s => s.Id == user.Id).FirstOrDefault();
+            if(shops != null)
+            {
+                return false;
+            }
            if(user.vouchers == null)
             {
                 user.vouchers = new List<Voucher>();
