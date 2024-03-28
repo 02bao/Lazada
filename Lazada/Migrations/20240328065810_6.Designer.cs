@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Lazada.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Taka.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    partial class LazadaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240328065810_6")]
+    partial class _6
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -495,6 +498,9 @@ namespace Taka.Migrations
                     b.Property<DateTime>("expire_date")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<List<string>>("list_user_applied")
+                        .HasColumnType("text[]");
+
                     b.Property<long?>("productvoucherid")
                         .HasColumnType("bigint");
 
@@ -504,9 +510,6 @@ namespace Taka.Migrations
                     b.Property<string>("title")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<long?>("user_applyid")
-                        .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
