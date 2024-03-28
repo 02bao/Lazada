@@ -11,7 +11,8 @@
         public string Brand { get; set; }
         public Category Category { get; set; }
         public Shop Shop { get; set; }
-        public int inventory { get; set; } //shop quan ly so luong san pham trong kho
+        public int inventory { get; set; }
+        public List<Voucher>? Voucher { get; set; }//shop quan ly so luong san pham trong kho
     }
 
 

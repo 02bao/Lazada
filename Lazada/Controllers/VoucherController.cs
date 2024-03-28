@@ -16,9 +16,9 @@ namespace Lazada.Controllers
         }
 
         [HttpPost("AddNewVoucher")]
-        public IActionResult AddNewVoucher(long shopid , Voucher_Add addvoucher, DateTime expiredate)
+        public IActionResult AddNewVoucher(long shopid , Voucher_Add addvoucher, DateTime expiredate, long productvoucher)
         {
-            bool tmp = _voucherRepository.AddnewVoucher(shopid, addvoucher, expiredate);
+            bool tmp = _voucherRepository.AddnewVoucher(shopid, addvoucher, expiredate,productvoucher);
             if(tmp)
             {
                 return Ok("Add Voucher Successfully");

@@ -13,7 +13,7 @@ namespace Lazada.Repository
         {
             _context = context;
         }
-        public bool AddnewVoucher(long shopid, Voucher_Add addvoucher, DateTime expiredate)
+        public bool AddnewVoucher(long shopid, Voucher_Add addvoucher, DateTime expiredate, long productvoucher)
         {
             if(string.IsNullOrEmpty(addvoucher.title))
                 return false;
@@ -22,22 +22,24 @@ namespace Lazada.Repository
             {
                 return false;
             }
-            if(addvoucher.type) //true la ca shop, false la cho tung san pham 
-            { //voucher cho tat ca san pham trong shop 
+            Product products = _context.Products.Where(s => s.ProductId == productvoucher).FirstOrDefault();
+            if(products == null)
+            {
+                //voucher cho tat ca san pham trong shop 
                 Voucher allshop = new Voucher
                 {
                     title = addvoucher.title,
                     Shop = shops,
-                    type = addvoucher.type,
+                    product_voucher = null,
                     public_date = addvoucher.public_date.ToUniversalTime(),
                     expire_date = expiredate.ToUniversalTime(),
                     discount = addvoucher.discount,
-                    list_product_applied = null,
                     User = null,
                 };
                 //Voucher cho tung san pham 
                 _context.Vouchers.Add(allshop);
                 shops.Voucher.Add(allshop);
+
             }
             else
             {
@@ -45,11 +47,10 @@ namespace Lazada.Repository
                 {
                     title = addvoucher.title,
                     Shop = shops,
-                    type = addvoucher.type,
+                    product_voucher = productvoucher,
                     public_date=addvoucher.public_date.ToUniversalTime(),
                     expire_date=expiredate.ToUniversalTime(),
                     discount = addvoucher.discount,
-                    list_product_applied = addvoucher.list_product_applied,
                     User = null,
                 };
                 _context.Vouchers.Add(someproduct);
