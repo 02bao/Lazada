@@ -5,7 +5,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Lazada.Migrations
+namespace Taka.Migrations
 {
     /// <inheritdoc />
     public partial class _1 : Migration
@@ -22,7 +22,6 @@ namespace Lazada.Migrations
                     Name = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
                     Password = table.Column<string>(type: "text", nullable: false),
-                    Address = table.Column<string>(type: "text", nullable: false),
                     Phone = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -103,19 +102,79 @@ namespace Lazada.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "Conversations",
                 columns: table => new
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
                     ShopId = table.Column<long>(type: "bigint", nullable: false),
+                    is_seen = table.Column<bool>(type: "boolean", nullable: false),
+                    lasttime = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Conversations", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Conversations_Shops_ShopId",
+                        column: x => x.ShopId,
+                        principalTable: "Shops",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Conversations_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Notifications",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    ShopId = table.Column<long>(type: "bigint", nullable: true),
+                    title = table.Column<string>(type: "text", nullable: false),
+                    time_sent = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    descrepstion = table.Column<string>(type: "text", nullable: false),
+                    isSeen = table.Column<bool>(type: "boolean", nullable: false),
+                    time_seen = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    isDelete = table.Column<bool>(type: "boolean", nullable: false),
+                    type_receive = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Notifications", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Notifications_Shops_ShopId",
+                        column: x => x.ShopId,
+                        principalTable: "Shops",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Notifications_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: true),
+                    ShopId = table.Column<long>(type: "bigint", nullable: true),
+                    list_cart_item = table.Column<List<string>>(type: "text[]", nullable: true),
                     status = table.Column<int>(type: "integer", nullable: false),
                     time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     address = table.Column<string>(type: "text", nullable: false),
-                    username_order = table.Column<string>(type: "text", nullable: false),
                     TotalPrice = table.Column<long>(type: "bigint", nullable: false),
                     CartitemName = table.Column<string>(type: "text", nullable: false),
+                    CartiteId = table.Column<long>(type: "bigint", nullable: false),
                     voucher = table.Column<List<string>>(type: "text[]", nullable: true)
                 },
                 constraints: table =>
@@ -125,14 +184,12 @@ namespace Lazada.Migrations
                         name: "FK_Orders_Shops_ShopId",
                         column: x => x.ShopId,
                         principalTable: "Shops",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Orders_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -148,7 +205,7 @@ namespace Lazada.Migrations
                     list_product_applied = table.Column<List<string>>(type: "text[]", nullable: true),
                     list_user_applied = table.Column<List<string>>(type: "text[]", nullable: true),
                     ShopId = table.Column<long>(type: "bigint", nullable: false),
-                    UserId = table.Column<long>(type: "bigint", nullable: false)
+                    UserId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -163,8 +220,7 @@ namespace Lazada.Migrations
                         name: "FK_Vouchers_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -180,7 +236,8 @@ namespace Lazada.Migrations
                     Description = table.Column<string>(type: "text", nullable: false),
                     Brand = table.Column<string>(type: "text", nullable: false),
                     CategoryId = table.Column<long>(type: "bigint", nullable: false),
-                    ShopId = table.Column<long>(type: "bigint", nullable: false)
+                    ShopId = table.Column<long>(type: "bigint", nullable: false),
+                    inventory = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -195,6 +252,28 @@ namespace Lazada.Migrations
                         name: "FK_Products_Shops_ShopId",
                         column: x => x.ShopId,
                         principalTable: "Shops",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Messages",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    type = table.Column<bool>(type: "boolean", nullable: false),
+                    message = table.Column<string>(type: "text", nullable: false),
+                    time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ConversationId = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Messages", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Messages_Conversations_ConversationId",
+                        column: x => x.ConversationId,
+                        principalTable: "Conversations",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -264,6 +343,42 @@ namespace Lazada.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Reviews",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    CartItemId = table.Column<long>(type: "bigint", nullable: false),
+                    ProductId = table.Column<long>(type: "bigint", nullable: false),
+                    rating = table.Column<double>(type: "double precision", nullable: false),
+                    option = table.Column<string>(type: "text", nullable: false),
+                    descreption = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reviews", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reviews_CartItems_CartItemId",
+                        column: x => x.CartItemId,
+                        principalTable: "CartItems",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Reviews_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Addresses_OrderId",
                 table: "Addresses",
@@ -305,6 +420,31 @@ namespace Lazada.Migrations
                 column: "ShopsId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Conversations_ShopId",
+                table: "Conversations",
+                column: "ShopId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Conversations_UserId",
+                table: "Conversations",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Messages_ConversationId",
+                table: "Messages",
+                column: "ConversationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_ShopId",
+                table: "Notifications",
+                column: "ShopId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Notifications_UserId",
+                table: "Notifications",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Orders_ShopId",
                 table: "Orders",
                 column: "ShopId");
@@ -323,6 +463,21 @@ namespace Lazada.Migrations
                 name: "IX_Products_ShopId",
                 table: "Products",
                 column: "ShopId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_CartItemId",
+                table: "Reviews",
+                column: "CartItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_ProductId",
+                table: "Reviews",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reviews_UserId",
+                table: "Reviews",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Shops_UserId",
@@ -347,10 +502,22 @@ namespace Lazada.Migrations
                 name: "Addresses");
 
             migrationBuilder.DropTable(
-                name: "CartItems");
+                name: "Messages");
+
+            migrationBuilder.DropTable(
+                name: "Notifications");
+
+            migrationBuilder.DropTable(
+                name: "Reviews");
 
             migrationBuilder.DropTable(
                 name: "Vouchers");
+
+            migrationBuilder.DropTable(
+                name: "Conversations");
+
+            migrationBuilder.DropTable(
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "Carts");

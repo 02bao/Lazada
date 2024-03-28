@@ -21,7 +21,13 @@ namespace Lazada.Repository
                 return false;
             }
             //kiem tra danh muc khong cho trung
-
+            Category oldcategory = _context.Categories.Where(s => s.CategoryName == categorycreate.CategoryName).FirstOrDefault();
+            {
+                if(oldcategory != null)
+                {
+                    return false;
+                }
+            }
             var category = new Category()
             {
                 CategoryName = categorycreate.CategoryName,

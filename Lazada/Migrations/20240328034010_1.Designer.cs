@@ -10,11 +10,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Lazada.Migrations
+namespace Taka.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    [Migration("20240325081637_5")]
-    partial class _5
+    [Migration("20240328034010_1")]
+    partial class _1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -162,6 +162,109 @@ namespace Lazada.Migrations
                     b.ToTable("Categories");
                 });
 
+            modelBuilder.Entity("Lazada.Models.Conversation", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ShopId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<bool>("is_seen")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("lasttime")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShopId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Conversations");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Message", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("ConversationId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("message")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("time")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<bool>("type")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConversationId");
+
+                    b.ToTable("Messages");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Notification", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long?>("ShopId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long?>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("descrepstion")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("isDelete")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("isSeen")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("time_seen")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("time_sent")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("title")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<bool>("type_receive")
+                        .HasColumnType("boolean");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ShopId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Notifications");
+                });
+
             modelBuilder.Entity("Lazada.Models.Order", b =>
                 {
                     b.Property<long>("Id")
@@ -169,6 +272,9 @@ namespace Lazada.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CartiteId")
+                        .HasColumnType("bigint");
 
                     b.Property<string>("CartitemName")
                         .IsRequired()
@@ -190,22 +296,11 @@ namespace Lazada.Migrations
                     b.Property<List<string>>("list_cart_item")
                         .HasColumnType("text[]");
 
-                    b.Property<string>("shoprname_order")
-                        .IsRequired()
-                        .HasColumnType("text");
-
                     b.Property<int>("status")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("time")
                         .HasColumnType("timestamp with time zone");
-
-                    b.Property<long>("userId_order")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("username_order")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<List<string>>("voucher")
                         .HasColumnType("text[]");
@@ -255,6 +350,9 @@ namespace Lazada.Migrations
                     b.Property<int>("Sold")
                         .HasColumnType("integer");
 
+                    b.Property<int>("inventory")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -262,6 +360,44 @@ namespace Lazada.Migrations
                     b.HasIndex("ShopId");
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Review", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("CartItemId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("ProductId")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("descreption")
+                        .HasColumnType("text");
+
+                    b.Property<string>("option")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<double>("rating")
+                        .HasColumnType("double precision");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CartItemId");
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("Lazada.Models.Shop", b =>
@@ -305,10 +441,6 @@ namespace Lazada.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -443,6 +575,51 @@ namespace Lazada.Migrations
                     b.Navigation("Shops");
                 });
 
+            modelBuilder.Entity("Lazada.Models.Conversation", b =>
+                {
+                    b.HasOne("Lazada.Models.Shop", "Shop")
+                        .WithMany()
+                        .HasForeignKey("ShopId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lazada.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Shop");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Message", b =>
+                {
+                    b.HasOne("Lazada.Models.Conversation", "Conversation")
+                        .WithMany("Message")
+                        .HasForeignKey("ConversationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Conversation");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Notification", b =>
+                {
+                    b.HasOne("Lazada.Models.Shop", "Shop")
+                        .WithMany()
+                        .HasForeignKey("ShopId");
+
+                    b.HasOne("Lazada.Models.User", "User")
+                        .WithMany("notifications")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Shop");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Lazada.Models.Order", b =>
                 {
                     b.HasOne("Lazada.Models.Shop", "Shop")
@@ -475,6 +652,33 @@ namespace Lazada.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("Shop");
+                });
+
+            modelBuilder.Entity("Lazada.Models.Review", b =>
+                {
+                    b.HasOne("Lazada.Models.CartItem", "CartItem")
+                        .WithMany()
+                        .HasForeignKey("CartItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lazada.Models.Product", "Product")
+                        .WithMany()
+                        .HasForeignKey("ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Lazada.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CartItem");
+
+                    b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Lazada.Models.Shop", b =>
@@ -515,6 +719,11 @@ namespace Lazada.Migrations
                     b.Navigation("Products");
                 });
 
+            modelBuilder.Entity("Lazada.Models.Conversation", b =>
+                {
+                    b.Navigation("Message");
+                });
+
             modelBuilder.Entity("Lazada.Models.Order", b =>
                 {
                     b.Navigation("Address");
@@ -531,6 +740,8 @@ namespace Lazada.Migrations
 
             modelBuilder.Entity("Lazada.Models.User", b =>
                 {
+                    b.Navigation("notifications");
+
                     b.Navigation("shops");
 
                     b.Navigation("vouchers");

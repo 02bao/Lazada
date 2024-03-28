@@ -9,7 +9,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace Lazada.Migrations
+namespace Taka.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
     partial class LazadaDBContextModelSnapshot : ModelSnapshot
@@ -347,6 +347,9 @@ namespace Lazada.Migrations
                     b.Property<int>("Sold")
                         .HasColumnType("integer");
 
+                    b.Property<int>("inventory")
+                        .HasColumnType("integer");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CategoryId");
@@ -435,10 +438,6 @@ namespace Lazada.Migrations
                         .HasColumnType("bigint");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -610,7 +609,7 @@ namespace Lazada.Migrations
                         .HasForeignKey("ShopId");
 
                     b.HasOne("Lazada.Models.User", "User")
-                        .WithMany("notìications")
+                        .WithMany("notifications")
                         .HasForeignKey("UserId");
 
                     b.Navigation("Shop");
@@ -738,7 +737,7 @@ namespace Lazada.Migrations
 
             modelBuilder.Entity("Lazada.Models.User", b =>
                 {
-                    b.Navigation("notìications");
+                    b.Navigation("notifications");
 
                     b.Navigation("shops");
 
