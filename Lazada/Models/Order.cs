@@ -12,6 +12,7 @@
         public string CartitemName { get; set; }
         public long CartiteId { get; set; }
         public Address Address { get; set; }
+        public long quantityorder { get; set; }
         //Chi moi tao order cho 1 san pham , tao them order cho nhiu san pham 
         //Tao them lay order bang shopid
         //lay thong tin customer da tung order hang cua shop 

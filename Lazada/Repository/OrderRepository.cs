@@ -58,9 +58,16 @@ namespace Lazada.Repository
                     {
                         voucher_discount = Voucherapplied.discount;
                     }
-                    Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
-                    cartItem.Status = Status_cart_item.order;
-                    orderItems.Add(cartItem);
+                    if(cartItem.Product.inventory >= cartItem.quantity)
+                    {
+                        Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
+                        cartItem.Status = Status_cart_item.order;
+                        orderItems.Add(cartItem);
+                    }
+                    else
+                    {
+                        continue;
+                    }
                 }
             }
             if (orderItems.Count == 0) 
