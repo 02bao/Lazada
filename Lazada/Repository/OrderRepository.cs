@@ -49,14 +49,18 @@ namespace Lazada.Repository
                                                       .FirstOrDefault();
                 if(cartItem != null)
                 {
-                    var Voucherapplied = _context.Vouchers.Include(s => s.User)
+                    if(voucherid != 0)
+                    {
+                        Voucher Voucherapplied = null;
+                        Voucherapplied = _context.Vouchers.Include(s => s.User)
                                                               .Where(s => s.Id == voucherid &&
-                                                              s.User.Id == userid && 
+                                                              s.User.Id == userid &&
                                                               s.expire_date > DateTime.Now)
                                                               .FirstOrDefault();
-                    if (Voucherapplied != null)
-                    {
-                        voucher_discount = Voucherapplied.discount;
+                        if (Voucherapplied != null)
+                        {
+                            voucher_discount = Voucherapplied.discount;
+                        }
                     }
                     if(cartItem.Product.inventory >= cartItem.quantity)
                     {
