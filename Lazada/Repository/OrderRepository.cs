@@ -64,6 +64,11 @@ namespace Lazada.Repository
                 {
                     Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
                     cartItem.Status = Status_cart_item.order;
+                    cartItem.Product.inventory -= cartItem.quantity;
+                }
+                else
+                {
+                    return false;
                 }
                 
             }
@@ -126,6 +131,29 @@ namespace Lazada.Repository
             _context.Orders.Remove(orders);
             _context.SaveChanges();
             return true;
+        }
+
+        public List<Order_Get> GetOrderbyShopid(long shopid)
+        {
+            List<Order_Get> response = new List<Order_Get>();
+            Shop shop = _context.Shops.SingleOrDefault(s => s.Id == shopid);
+            if(shop == null)
+            {
+                return response;
+            }
+            var order = _context.Orders.Include(s => s.User).Include(s => s.Address)
+                .Include(s => s.list_cartitem).Where( s => s.Shop.Id == shopid)
+                .Select(s => new Order_Get
+                {
+                    orderid = s.Id,
+                    userId_order = s.User.Id,
+                    username_order = s.User.Name,
+                    shopid_order = shopid,
+                    address = s.Address.Address_Detail,
+                    cartitem = s.list_cartitem,
+                    TotalPrice = s.TotalPrice,
+                }).ToList();
+            return order;
         }
     }
 }

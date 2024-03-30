@@ -25,6 +25,7 @@ namespace Lazada.Data
         {
             base.OnConfiguring(optionsBuilder);
             optionsBuilder.UseNpgsql(configsql);
+            optionsBuilder.EnableSensitiveDataLogging();
         }
     }
 }
