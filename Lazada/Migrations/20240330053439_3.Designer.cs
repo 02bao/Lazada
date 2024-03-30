@@ -3,6 +3,7 @@ using System;
 using Lazada.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Taka.Migrations
 {
     [DbContext(typeof(LazadaDBContext))]
-    partial class LazadaDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240330053439_3")]
+    partial class _3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -278,6 +281,13 @@ namespace Taka.Migrations
 
                     b.Property<long>("AddressId")
                         .HasColumnType("bigint");
+
+                    b.Property<long>("CartiteId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("CartitemName")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<long?>("ShopId")
                         .HasColumnType("bigint");

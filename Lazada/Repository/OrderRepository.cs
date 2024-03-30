@@ -48,10 +48,11 @@ namespace Lazada.Repository
             {
                 if (voucherid != 0)
                 {
+                   
                     var Voucherapplied = _context.Vouchers.Include(s => s.User)
                                                            .Where(s => s.Id == voucherid &&
                                                            s.User.Id == userid &&
-                                                           s.expire_date > DateTime.Now)
+                                                           s.expire_date > DateTime.UtcNow)
                                                            .FirstOrDefault();
                     if (Voucherapplied != null)
                     {
@@ -106,7 +107,7 @@ namespace Lazada.Repository
                     userId_order = user.Id,
                     username_order = user.Name,
                     address = address.Address_Default,
-                    CartitemName = s.CartitemName,
+                    //CartitemName = s.CartitemName,
                     TotalPrice = s.TotalPrice
                 }).ToList();
             return orders;

@@ -9,8 +9,8 @@
         public Status_Order status { get; set; } = Status_Order.cho_thanh_toan;
         public DateTime time { get; set; } = DateTime.UtcNow;
         public long TotalPrice { get; set; }
-        public string CartitemName { get; set; }
-        public long CartiteId { get; set; }
+        //public string CartitemName { get; set; }
+        //public long CartiteId { get; set; }
         public Address Address { get; set; }
         public long quantityorder { get; set; }
         //Chi moi tao order cho 1 san pham , tao them order cho nhiu san pham 
