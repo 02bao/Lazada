@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Web.Helpers;
 
 
@@ -64,10 +65,7 @@ namespace Lazada.Repository
                     Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
                     cartItem.Status = Status_cart_item.order;
                 }
-                else
-                {
-                    return false;
-                }
+                
             }
             Shop shop = _context.Shops.SingleOrDefault(s => s.Id == cartItem.Carts.Shops.Id);
             if (shop == null)
@@ -99,6 +97,7 @@ namespace Lazada.Repository
             {
                 return response;
             }
+            CartItem cartitems = _context.CartItems.Include(s => s.Product).Include(s =>s.order).FirstOrDefault(s => s.Carts.Users.Id == userId);
             Address address = _context.Addresses.Include(s => s.Order).SingleOrDefault(s => s.Users.Id == userId);
             var orders = _context.Orders.Where(s => s.User.Id == userId)
                 .Select(s => new Order_Get
@@ -107,7 +106,7 @@ namespace Lazada.Repository
                     userId_order = user.Id,
                     username_order = user.Name,
                     address = address.Address_Default,
-                    //CartitemName = s.CartitemName,
+                    CartitemName = cartitems.Product.ProductName,
                     TotalPrice = s.TotalPrice
                 }).ToList();
             return orders;
