@@ -105,7 +105,7 @@ namespace Lazada.Repository
                     orderid = s.Id,
                     userId_order = user.Id,
                     username_order = user.Name,
-                    address = address.Address_Default,
+                    address = address.Address_Detail,
                     CartitemName = cartitems.Product.ProductName,
                     TotalPrice = s.TotalPrice
                 }).ToList();
