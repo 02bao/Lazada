@@ -115,7 +115,7 @@ namespace Lazada.Repository
                     username_order = user.Name,
                     address = address.Address_Detail,
                     shopid_order = s.Shop.Id,
-                    cartitem = s.list_cartitem,
+                    cartitem = s.list_cartitem.Select(s => s.Product.ProductName).ToList(),
                     TotalPrice = s.TotalPrice
                 }).ToList();
             return orders;
@@ -142,7 +142,7 @@ namespace Lazada.Repository
                 return response;
             }
             var order = _context.Orders.Include(s => s.User).Include(s => s.Address)
-                .Include(s => s.list_cartitem).Where( s => s.Shop.Id == shopid)
+                .Include(s => s.list_cartitem).ThenInclude(s => s.Product).Where( s => s.Shop.Id == shopid)
                 .Select(s => new Order_Get
                 {
                     orderid = s.Id,
@@ -150,7 +150,7 @@ namespace Lazada.Repository
                     username_order = s.User.Name,
                     shopid_order = shopid,
                     address = s.Address.Address_Detail,
-                    cartitem = s.list_cartitem,
+                    cartitem = s.list_cartitem.Select(s => s.Product.ProductName).ToList(),
                     TotalPrice = s.TotalPrice,
                 }).ToList();
             return order;

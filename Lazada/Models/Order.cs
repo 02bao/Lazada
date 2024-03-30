@@ -33,7 +33,7 @@
         public string username_order { get; set; }
         public long shopid_order { get; set; }
         public string address { get; set; }
-        public List<CartItem> cartitem { get; set; }
+        public List<string> cartitem { get; set; }
         public long TotalPrice { get; set; }
     }
     public class OrderItem
