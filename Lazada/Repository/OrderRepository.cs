@@ -19,7 +19,7 @@ namespace Lazada.Repository
             _context = context;
         }
 
-        public bool AddtoOrder(long userid, List<long> cartitemids, long voucherid)
+        public bool AddtoOrder(long userid, long cartitemids, long voucherid)
         {
             User user = _context.Users.SingleOrDefault(s => s.Id == userid);
             if (user == null)
@@ -37,84 +37,57 @@ namespace Lazada.Repository
             //quan ly tgian han su dung voucher
             var voucher_discount = 0;
             long Pricediscount = 0;
-            List<CartItem> orderItems = new List<CartItem>();
-            foreach(var cartitemid in cartitemids)
-            {
-                var cartItem = _context.CartItems.Include(s => s.Product)
+            var cartItem = _context.CartItems.Include(s => s.Product)
                                                       .Include(s => s.Carts)
                                                       .ThenInclude(s => s.Shops)
-                                                      .Where(s => s.Id == cartitemid &&
+                                                      .Where(s => s.Id == cartitemids &&
                                                         s.Carts.Users.Id == userid && 
                                                         s.Status == Status_cart_item.active)
                                                       .FirstOrDefault();
-                if(cartItem != null)
+            if (cartItem != null)
+            {
+                if (voucherid != 0)
                 {
-                    if(voucherid != 0)
+                    var Voucherapplied = _context.Vouchers.Include(s => s.User)
+                                                           .Where(s => s.Id == voucherid &&
+                                                           s.User.Id == userid &&
+                                                           s.expire_date > DateTime.Now)
+                                                           .FirstOrDefault();
+                    if (Voucherapplied != null)
                     {
-                        Voucher Voucherapplied = null;
-                        Voucherapplied = _context.Vouchers.Include(s => s.User)
-                                                              .Where(s => s.Id == voucherid &&
-                                                              s.User.Id == userid &&
-                                                              s.expire_date > DateTime.Now)
-                                                              .FirstOrDefault();
-                        if (Voucherapplied != null)
-                        {
-                            voucher_discount = Voucherapplied.discount;
-                        }
-                    }
-                    if(cartItem.Product.inventory >= cartItem.quantity)
-                    {
-                        Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
-                        cartItem.Status = Status_cart_item.order;
-                        orderItems.Add(cartItem);
-                    }
-                    else
-                    {
-                        continue;
+                        voucher_discount = Voucherapplied.discount;
                     }
                 }
+                if (cartItem.Product.inventory >= cartItem.quantity)
+                {
+                    Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
+                    cartItem.Status = Status_cart_item.order;
+                }
+                else
+                {
+                    return false;
+                }
             }
-            if (orderItems.Count == 0) 
-            {
-                return false;
-            }
-            
-            // cartitem trang thai order roi ma shop null thi huy, vayj cartitem van la trang thai order 
-            Shop shop = _context.Shops.SingleOrDefault(s => s.Id == orderItems[0].Carts.Shops.Id);
+            Shop shop = _context.Shops.SingleOrDefault(s => s.Id == cartItem.Carts.Shops.Id);
             if (shop == null)
-            {
-                foreach(var cartitem in orderItems)
                 {
-                    cartitem.Status = Status_cart_item.active;
+                    cartItem.Status = Status_cart_item.active;
+                    _context.SaveChanges();
+                    return false;
                 }
+                Order newOrder = new Order
+                {
+                    User = user,
+                    Shop = shop,
+                    Address = addressdefault,
+                    TotalPrice = Pricediscount,
+                    time = DateTime.UtcNow,
+                    status = Status_Order.cho_thanh_toan,
+                    list_cartitem = new List<CartItem> { cartItem},
+                };
+                _context.Orders.Add(newOrder);
                 _context.SaveChanges();
-                return false;
-            }
-            Order newOrder = new Order
-            {
-                User = user,
-                Shop = shop,
-                Address = addressdefault,
-                TotalPrice = Pricediscount,
-                time = DateTime.UtcNow,
-                status = Status_Order.cho_thanh_toan,
-                list_cartitem = orderItems,
-            };
-            _context.Orders.Add(newOrder);
-            _context.SaveChanges();
-            return true;
-        }
-
-        public bool CancleOrder(long orderId)
-        {
-            Order orders = _context.Orders.SingleOrDefault(s => s.Id == orderId);
-            if(orders == null)
-            {
-                return false;
-            }
-            _context.Orders.Remove(orders);
-            _context.SaveChanges();
-            return true;
+                return true;
         }
 
         public List<Order_Get> GetOrderbyUserId(long userId)
@@ -139,10 +112,16 @@ namespace Lazada.Repository
             return orders;
         }
 
-
-
-
-
-
+        public bool CancleOrder(long orderId)
+        {
+            Order orders = _context.Orders.SingleOrDefault(s => s.Id == orderId);
+            if (orders == null)
+            {
+                return false;
+            }
+            _context.Orders.Remove(orders);
+            _context.SaveChanges();
+            return true;
+        }
     }
 }

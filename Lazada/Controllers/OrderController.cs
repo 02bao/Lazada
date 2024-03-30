@@ -16,7 +16,7 @@ namespace Lazada.Controllers
         }
 
         [HttpPost("AddtoOrder")]
-        public IActionResult AddtoOrder(long userid, List<long> cartitemids, long voucherid)
+        public IActionResult AddtoOrder(long userid, long cartitemids, long voucherid)
         {
             bool tmp = _orderRepository.AddtoOrder(userid, cartitemids, voucherid);
             if(tmp)
