@@ -97,16 +97,20 @@ namespace Lazada.Repository
             {
                 return response;
             }
-            CartItem cartitems = _context.CartItems.Include(s => s.Product).Include(s =>s.order).FirstOrDefault(s => s.Carts.Users.Id == userId);
-            Address address = _context.Addresses.Include(s => s.Order).SingleOrDefault(s => s.Users.Id == userId);
-            var orders = _context.Orders.Where(s => s.User.Id == userId)
+            Address address = _context.Addresses.SingleOrDefault(s => s.Users.Id == userId);
+            if(address == null)
+            {
+                return response;
+            }
+            var orders = _context.Orders.Include(s => s.list_cartitem).ThenInclude(s => s.Product).Where(s => s.User.Id == userId)
                 .Select(s => new Order_Get
                 {
                     orderid = s.Id,
                     userId_order = user.Id,
                     username_order = user.Name,
                     address = address.Address_Detail,
-                    CartitemName = cartitems.Product.ProductName,
+                    shopid_order = s.Shop.Id,
+                    cartitem = s.list_cartitem,
                     TotalPrice = s.TotalPrice
                 }).ToList();
             return orders;
