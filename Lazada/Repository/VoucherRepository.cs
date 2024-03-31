@@ -67,7 +67,7 @@ namespace Lazada.Repository
         {
             List<Voucher_Product> response = new List<Voucher_Product>();
             Cart carts = _context.Carts.Include(s => s.Shops).ThenInclude(s => s.Voucher)
-                                        .SingleOrDefault(s => s.Id == cartid);
+                                        .ThenInclude(s => s.Product).SingleOrDefault(s => s.Id == cartid);
             if (carts == null)
             {
                 return response;
@@ -82,12 +82,17 @@ namespace Lazada.Repository
                     {
                         continue;
                     }
+                    long? productvoucherid = null;
+                    if (voucher.Product != null)
+                    {
+                        productvoucherid = voucher.Product.ProductId;
+                    }
                     Voucher_Product tmp = new Voucher_Product
                     {
                         voucherId = voucher.Id,
                         title = voucher.title,
                         discount = voucher.discount,
-                        productvoucherid = voucher.Product.ProductId,
+                        productvoucherid = productvoucherid,
                         expire_date = voucher.expire_date,
                     };
                     response.Add(tmp);
