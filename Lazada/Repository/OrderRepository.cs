@@ -107,6 +107,7 @@ namespace Lazada.Repository
             {
                 return response;
             }
+            CartItem cartitem = _context.CartItems.Include(S => S.order).SingleOrDefault(s => s.order.User.Id == userId);
             var orders = _context.Orders.Include(s => s.list_cartitem).ThenInclude(s => s.Product).Where(s => s.User.Id == userId)
                 .Select(s => new Order_Get
                 {
@@ -115,7 +116,8 @@ namespace Lazada.Repository
                     username_order = user.Name,
                     address = address.Address_Detail,
                     shopid_order = s.Shop.Id,
-                    cartitem = s.list_cartitem.Select(s => s.Product.ProductName).ToList(),
+                    cartitem = s.list_cartitem.Select(s => $"ProductId:{s.Product.ProductId} - ProductName:{s.Product.ProductName}" +
+                    $" - Quantity:{s.quantity} - Options:{s.option}").ToList(),
                     TotalPrice = s.TotalPrice
                 }).ToList();
             return orders;
