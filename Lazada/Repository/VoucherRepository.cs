@@ -156,13 +156,18 @@ namespace Lazada.Repository
 
                 foreach(Voucher item in shopvoucher)
                 {
+                    long? productvoucherid = null;
+                    if (item.Product != null)
+                    {
+                        productvoucherid = item.Product.ProductId;
+                    }
                     Voucher_Product tmp = new Voucher_Product
                     {
                         voucherId=item.Id,
                         title = item.title,
                         discount = item.discount,
                         expire_date = item.expire_date,
-                        productvoucherid = item.Product.ProductId,
+                        productvoucherid = productvoucherid,
                     };
                     response.Add(tmp);
                 }
