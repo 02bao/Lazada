@@ -35,7 +35,7 @@ namespace Lazada.Repository
             }
 
             var voucher_discount = 0;
-            long Pricediscount = 0;
+            double Pricediscount = 0;
             //Them truong hop ko co id voucher thi nhap ko va xu ly 
             //quan ly tgian han su dung voucher
             var cartItems = _context.CartItems.Include(s => s.Product)
@@ -70,7 +70,7 @@ namespace Lazada.Repository
             }
             foreach (var cartItem in cartItems)
             {
-                Pricediscount = cartItem.Product.ProductPrice - cartItem.Product.ProductPrice * (voucher_discount / 100);
+                Pricediscount += (cartItem.Product.ProductPrice*(1 - (voucher_discount / 100)))*cartItem.quantity;
                 cartItem.Status = Status_cart_item.order;
                 cartItem.Product.inventory -= cartItem.quantity;
             }

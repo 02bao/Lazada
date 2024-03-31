@@ -8,7 +8,7 @@
         public List<CartItem>? list_cartitem { get; set; }
         public Status_Order status { get; set; } = Status_Order.cho_thanh_toan;
         public DateTime time { get; set; } = DateTime.UtcNow;
-        public long TotalPrice { get; set; }
+        public double TotalPrice { get; set; }
         //public string CartitemName { get; set; }
         //public long CartiteId { get; set; }
         public Address Address { get; set; }
@@ -34,7 +34,7 @@
         public long shopid_order { get; set; }
         public string address { get; set; }
         public List<string> cartitem { get; set; }
-        public long TotalPrice { get; set; }
+        public double TotalPrice { get; set; }
     }
     public class OrderItem
     {
